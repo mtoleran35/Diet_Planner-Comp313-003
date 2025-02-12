@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Main Container -->
+    <div class="min-h-screen flex items-center justify-center">
+        <!-- Form Container -->
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h2 class="text-2xl font-bold text-center mb-6">Create an Account</h2>
+            
+            <!-- Register Form -->
+            <form action="/register" method="post">
+ 			   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <!-- First Name -->
+                <div class="mb-4">
+                    <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" name="firstName" id="firstName" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <!-- Last Name -->
+                <div class="mb-4">
+                    <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" name="lastName" id="lastName" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <!-- Username -->
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" name="username" id="username" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <!-- Account Type (Dropdown) -->
+                <div class="mb-6">
+                    <label for="accountType" class="block text-sm font-medium text-gray-700">Account Type</label>
+                    <select name="accountType" id="accountType" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option value="USER">USER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+
+                <!-- Weight -->
+                <div class="mb-4">
+                    <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
+                    <input type="number" name="weight" step="0.1" id="weight" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                        
+                <!-- Caloric Intake Goal -->
+                <div class="mb-4">
+                    <label for="caloricIntakeGoal" class="block text-sm font-medium text-gray-700">Caloric Intake Goal</label>
+                    <input type="number" name="caloricIntakeGoal" id="caloricIntakeGoal" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                
+                <!-- Diet Preference -->
+                <div class="mb-6">
+                    <label for="dietPreference" class="block text-sm font-medium text-gray-700">Diet Preference</label>
+                    <select name="dietPreference" id="dietPreference" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option value="BALANCED">BALANCED</option>
+                        <option value="DASH">DASH</option>
+                        <option value="HIGH PROTEIN">HIGH PROTEIN</option>
+                        <option value="KETO">KETO</option>
+                        <option value="LOW CARB">LOW CARB</option>
+                        <option value="MEDITERRANEAN">MEDITERRANEAN</option>
+                        <option value="VEGETARIAN">VEGETARIAN</option>
+                    </select>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Register</button>
+            </form>
+
+            <!-- Login Link -->
+            <p class="mt-4 text-center text-sm text-gray-600">
+                Already have an account? <a href="/login" class="text-blue-500 hover:underline">Login here</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html> -->
+<!-- <html xmlns:th="http://www.thymeleaf.org"> -->
+<!-- <head> -->
+<!--     <title>Register</title> -->
+<!-- 	<script src="https://cdn.tailwindcss.com"></script> -->
+<!-- </head> -->
+<!-- <body> -->
+<!--     <h1>Register</h1> -->
+<!--     <form method="post" th:action="@{/register}"> -->
+<!--         <label for="firstName">First Name:</label> -->
+<!--         <input type="text" name="firstName" required> -->
+        
+<!--         <label for="lastName">Last Name:</label> -->
+<!--         <input type="text" name="lastName" required> -->
+        
+<!--         <label for="username">Username:</label> -->
+<!--         <input type="text" name="username" required> -->
+        
+<!--         <label for="password">Password:</label> -->
+<!--         <input type="password" name="password" required> -->
+        
+<!--         <label for="weight">Weight:</label> -->
+<!--         <input type="number" name="weight" step="0.1" required> -->
+        
+<!--         <label for="caloricIntakeGoal">Caloric Intake Goal:</label> -->
+<!--         <input type="number" name="caloricIntakeGoal" required> -->
+        
+<!--         <label for="dietPreference">Diet Preference:</label> -->
+<!--         <input type="text" name="dietPreference" required> -->
+        
+<!--         <button type="submit">Register</button> -->
+<!--     </form> -->
+<!-- </body> -->
+<!-- </html> -->
