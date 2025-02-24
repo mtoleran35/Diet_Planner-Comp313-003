@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin - Meals</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <h1>Meals Management</h1>
+    <a href="/admin/addMeal">Add Meal</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Meal Name</th>
+                <th>Calories</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="meal : ${meals}">
+                <td th:text="${meal.mealName}"></td>
+                <td th:text="${meal.calories}"></td>
+                <td><a th:href="@{/admin/deleteMeal/{id}(id=${meal.id})}">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
