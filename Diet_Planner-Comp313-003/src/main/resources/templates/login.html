@@ -10,6 +10,12 @@
         <!-- Form Container -->
         <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
             <h2 class="text-2xl font-bold text-center mb-6">Login to Your Account</h2>
+
+	    <!-- Display Error Message
+            <div th:if="${errorMessage}" class="mb-4 text-red-500 text-sm" th:text="${errorMessage}"></div> -->
+            <div th:if="${errorMessage}" class="text-red-500 text-sm mb-4">
+                <p th:text="${errorMessage}"></p>
+            </div>
             
             <!-- Login Form -->
             <form action="/login" method="post">
