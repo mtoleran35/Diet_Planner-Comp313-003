@@ -4,23 +4,43 @@
     <title>Diet Planner</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-white text-gray-800">
-    <!-- Navbar -->
-    <nav class="flex justify-between items-center p-4 shadow bg-white">
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-gray-800 text-white shadow-lg py-3">
+    <div class="container mx-auto flex items-center px-6">
         <a href="/" class="text-lg font-bold flex items-center">
             <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
-        </a>  
-        <div>
-            <a href="/register" class="text-blue-500 hover:underline px-4">Register</a>
-            <a href="/login" class="text-blue-500 hover:underline">Login</a>
-        </div>
-    </nav>
+        </a>
+        <a href="/register" class="text-lg px-2 font-bold hover:underline">Register</a>
+        <a href="/login" class="text-lg px-2 font-bold hover:underline">Login</a>
+    </div>
+</nav>
 
     <!-- Hero Section -->
-    <section class="flex flex-col items-center justify-center h-screen text-center">
-        <h1 class="text-4xl font-extrabold">Welcome to Diet Planner</h1>
-        <p class="text-lg text-gray-600 mt-2">Your personalized meal planning assistant.</p>
-        <a href="/register" class="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Get Started</a>
+    <section class="relative w-full h-screen">
+        <!-- Full-Screen Image -->
+        <img src="/img/imagewelcomee.png" alt="Healthy meal planning" class="absolute inset-0 w-full h-full object-cover">
+        
+        <!-- Overlay Text -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center bg-black bg-opacity-50">
+            <h1 class="text-5xl font-extrabold text-white">Welcome to Diet Planner</h1>
+            <p class="text-xl text-gray-200 mt-2">Your personalized meal planning assistant.</p>
+            <a href="/register" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md">
+                Get Started
+            </a>
+        </div>
     </section>
+
+   <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+    <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+        <p>&copy; 2025 Diet Planner |</p>
+<a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
+        <span class="text-gray-400">|</span>
+<a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
+    </div>
+</footer>
+
+
 </body>
 </html>
