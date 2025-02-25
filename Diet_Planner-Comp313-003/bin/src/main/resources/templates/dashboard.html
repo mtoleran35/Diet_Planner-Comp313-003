@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-4 shadow bg-white">
+        <a href="/" class="text-lg font-bold flex items-center">
+            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+        </a>
+        <div class="flex items-center space-x-4">
+            <span class="font-semibold" th:text="${username}"></span>
+            <a href="/settings" class="text-blue-500 hover:underline">Settings</a>
+            <a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
+            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
+            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <section class="p-6">
+        <h1 class="text-3xl font-bold">Welcome, <span th:text="${username}"></span></h1>
+        <p class="text-gray-600 mt-2">Manage your meal plans and track your diet goals.</p>
+    </section>
+</body>
+</html>
