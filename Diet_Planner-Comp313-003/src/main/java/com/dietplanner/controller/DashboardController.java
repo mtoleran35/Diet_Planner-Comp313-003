@@ -16,23 +16,37 @@ public class DashboardController {
     public DashboardController(UserService userService) {
         this.userService = userService;
     }
-
+    
     @GetMapping("/dashboard")
     public String dashboard(@AuthenticationPrincipal UserDetails user, Model model) {
         User appUser = userService.findByUsername(user.getUsername());
-        model.addAttribute("username", appUser.getUsername());
 
+        // Add user attributes to the model
+        model.addAttribute("username", appUser.getUsername());
+        model.addAttribute("firstName", appUser.getFirstName());
+        model.addAttribute("lastName", appUser.getLastName());
+        model.addAttribute("weight", appUser.getWeight());
+        model.addAttribute("caloricIntakeGoal", appUser.getCaloricIntakeGoal());
+        model.addAttribute("dietPreferences", appUser.getDietPreference()); // Ensure this is a List<String> if multiple
+
+        // Redirect if ADMIN
         if ("ADMIN".equalsIgnoreCase(appUser.getAccounttype())) {
-            return "redirect:/admin-dashboard"; // Redirect to admin dashboard if ADMIN
-        } else {
-            return "dashboard"; // Load regular user dashboard
+            return "redirect:/admin-dashboard"; 
         }
+
+        return "dashboard"; // Load regular user dashboard
     }
 
     @GetMapping("/admin-dashboard")
     public String adminDashboard(@AuthenticationPrincipal UserDetails user, Model model) {
         User appUser = userService.findByUsername(user.getUsername());
+
         model.addAttribute("username", appUser.getUsername());
+        model.addAttribute("firstName", appUser.getFirstName());
+        model.addAttribute("lastName", appUser.getLastName());
+        
+
         return "admin-dashboard";
     }
 }
+

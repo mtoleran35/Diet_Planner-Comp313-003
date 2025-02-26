@@ -32,4 +32,7 @@ public class Meal {
 
     @Column(name = "status")
     private String status;
+
+	  
+    
 }
