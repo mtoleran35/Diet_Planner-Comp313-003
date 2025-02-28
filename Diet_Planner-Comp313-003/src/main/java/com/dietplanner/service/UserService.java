@@ -42,7 +42,8 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-//    public User saveUser(User user) {
+//  comment  
+  //  public User saveUser(User user) {
 //        if (!user.getPassword().startsWith("$argon2id$")) { // Ensure password is hashed
 //            user.setPassword(passwordEncoder.encode(user.getPassword()));
 //        }

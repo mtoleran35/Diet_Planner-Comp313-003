@@ -23,7 +23,8 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user, Model model) {
         try {
-            user.setAccounttype("USER");
+            //user.setAccounttype("USER");
+            //user.setAccounttype(user.);
             userService.saveUser(user);
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
