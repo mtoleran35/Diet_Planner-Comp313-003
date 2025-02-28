@@ -8,6 +8,6 @@ public class PrivacyController {
 
     @GetMapping("/privacy")
     public String showPrivacyPage() {
-        return "privacy"; // Return Thymeleaf privacy.html
+        return "privacy"; 
     }
 }
