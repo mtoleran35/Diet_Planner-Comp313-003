@@ -23,6 +23,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/img/**").permitAll() // Public pages
                 .requestMatchers("/login", "/register").permitAll() // Allow login and registration
+                .requestMatchers("/privacy").permitAll() 
+                .requestMatchers("/contact").permitAll() 
                 .requestMatchers("/admin-dashboard", "/meals/**", "/img/**").hasRole("ADMIN") // Admin routes
                 .anyRequest().authenticated()
             )
