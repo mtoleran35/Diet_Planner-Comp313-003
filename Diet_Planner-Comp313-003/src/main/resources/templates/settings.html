@@ -1,0 +1,100 @@
+<!-- alice -- updated the settings.html -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+	<script>
+        function enableEditing() {
+            document.querySelectorAll(".editable").forEach(el => {
+                el.removeAttribute("readonly");
+                el.removeAttribute("disabled");
+            });
+            document.getElementById("updateBtn").classList.remove("hidden");
+            document.getElementById("editBtn").classList.add("hidden");
+        }
+    </script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-4 shadow bg-white">
+        <a href="/dashboard" class="text-lg font-bold flex items-center">
+            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Dashboard
+        </a>
+        <div class="flex items-center space-x-4">
+            <span class="font-semibold" th:text="${username}"></span>
+            <a href="/settings" class="text-blue-500 hover:underline">Settings</a>
+            <a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
+            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
+            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Page Content -->    
+    <section class="p-6">
+        <h1 class="text-3xl font-bold">Profile Settings</h1>
+       
+        <!-- Settings Form -->
+        <form action="/update-profile" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            
+            <!-- First Name -->
+            <div class="mb-4">
+                <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                <input type="text" name="firstName" id="firstName" th:value="${user.firstName}" class="editable mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" readonly required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="mb-4">
+                <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                <input type="text" name="lastName" id="lastName" th:value="${user.lastName}" class="editable mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" readonly required>
+            </div>
+
+            <!-- Username -->
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" name="username" id="username" th:value="${user.username}" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" readonly required>
+            </div>
+
+            <!-- Weight -->
+            <div class="mb-4">
+                <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
+                <input type="number" name="weight" step="0.1" id="weight" th:value="${user.weight}" class="editable mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" readonly required>
+            </div>
+                    
+            <!-- Caloric Intake Goal -->
+            <div class="mb-4">
+                <label for="caloricIntakeGoal" class="block text-sm font-medium text-gray-700">Caloric Intake Goal</label>
+                <input type="number" name="caloricIntakeGoal" id="caloricIntakeGoal" th:value="${user.caloricIntakeGoal}" class="editable mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" readonly required>
+            </div>
+            
+            <!-- Diet Preference -->
+            <div class="mb-6">
+                <label for="dietPreference" class="block text-sm font-medium text-gray-700">Diet Preference</label>
+                <select name="dietPreference" id="dietPreference" class="editable mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" disabled>
+                    <option th:value="${user.dietPreference}" th:text="${user.dietPreference}" selected></option>
+                    <option value="BALANCED">BALANCED</option>
+                    <option value="DASH">DASH</option>
+                    <option value="HIGH PROTEIN">HIGH PROTEIN</option>
+                    <option value="KETO">KETO</option>
+                    <option value="LOW CARB">LOW CARB</option>
+                    <option value="MEDITERRANEAN">MEDITERRANEAN</option>
+                    <option value="VEGETARIAN">VEGETARIAN</option>
+                </select>
+            </div>
+                
+            <!-- Buttons -->
+            <div class="flex justify-between">
+                <button type="button" id="editBtn" class="py-3 px-6 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50" onclick="enableEditing()">Edit</button>
+                
+                <button type="submit" id="updateBtn" class="hidden py-3 px-6 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Update</button>
+                
+                <a href="/" class="py-3 px-6 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">Go Back to Homepage</a>
+            </div>
+        </form>
+    </section>
+</body>
+</html>
+
