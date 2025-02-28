@@ -41,4 +41,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+    
+    public void updateUserProfile(String username, User updatedUser) {
+		// TODO Auto-generated method stub
+		
+	}
 }

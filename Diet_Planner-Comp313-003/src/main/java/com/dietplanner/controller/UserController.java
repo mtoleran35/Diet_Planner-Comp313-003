@@ -3,6 +3,8 @@ package com.dietplanner.controller;
 import com.dietplanner.model.User;
 import com.dietplanner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,4 +32,11 @@ public class UserController {
         return "redirect:/login";
     }
     
+    @PostMapping("/update-profile")
+    public String updateProfile(@AuthenticationPrincipal UserDetails user, @ModelAttribute User updatedUser) {
+        //String username = principal.getName();
+        userService.updateUserProfile(user.getUsername(), updatedUser);
+        return "redirect:/dashboard"; // Redirect back to dashboard after updating
+        //return "redirect:/settings?success";
+    } 
 }
