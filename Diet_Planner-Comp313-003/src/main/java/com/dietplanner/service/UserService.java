@@ -29,13 +29,26 @@ public class UserService implements UserDetailsService {
                 .roles(user.getAccounttype()) // Assign roles
                 .build();
     }
-
+    
     public User saveUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("User already exists");
+        }
+
         if (!user.getPassword().startsWith("$argon2id$")) { // Ensure password is hashed
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+
         return userRepository.save(user);
     }
+
+//  comment  
+  //  public User saveUser(User user) {
+//        if (!user.getPassword().startsWith("$argon2id$")) { // Ensure password is hashed
+//            user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        }
+//        return userRepository.save(user);
+//    }
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
