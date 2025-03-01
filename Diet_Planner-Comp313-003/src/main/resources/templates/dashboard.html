@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<title>Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
-    <!-- Navbar -->
-    <nav class="flex justify-between items-center p-4 shadow bg-white">
-        <a href="/" class="text-lg font-bold flex items-center">
-            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
-        </a>
-        <div class="flex items-center space-x-4">
-            <span class="font-semibold" th:text="${username}"></span>
-            <a href="/settings" class="text-blue-500 hover:underline">Settings</a>
-            <a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
-            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
-            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
-        </div>
-    </nav>
+	<!-- Navbar -->
+	<nav class="flex justify-between items-center p-4 shadow bg-white">
+		<a href="/" class="text-lg font-bold flex items-center"> <img
+			src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+		</a>
+		<div class="flex items-center space-x-4">
+			<span class="font-semibold" th:text="${firstName + ' ' + lastName}"></span>
+			<a	href="/settings" class="text-blue-500 hover:underline">Settings</a>
+			<a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
+			<a href="/createplan" class="text-blue-500 hover:underline">Create
+				Plan</a> <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+		</div>
+	</nav>
 
-    <!-- Dashboard Content -->
-    <section class="p-6">
-        <h1 class="text-3xl font-bold">Welcome, <span th:text="${username}"></span></h1>
-        <p class="text-gray-600 mt-2">Manage your meal plans and track your diet goals.</p>
-    </section>
+	<!-- Dashboard Content -->
+	<section class="p-6">
+		<h1 class="text-3xl font-bold">
+			Welcome, <span th:text="${firstName + ' ' + lastName}"></span>
+		</h1>
+		<p class="text-gray-600 mt-2">Manage your meal plans and track
+			your diet goals.</p>
+
+		<!-- alice - added the display of user registration details and diet
+		preferences -->
+		
+		<!-- Registration Details -->
+
+		<section class="p-6 mt-6 bg-white shadow rounded-md">
+
+			<div class="mt-4">
+				<p>
+					<strong>Username:</strong> <span th:text="${username}"></span>
+				</p>
+				<p>
+					<strong>Weight:</strong> <span th:text="${weight}"></span>
+				</p>
+				<p>
+					<strong>Caloric Intake Goal:</strong> <span
+						th:text="${caloricIntakeGoal}"></span>
+				</p>
+
+			</div>
+		</section>
+
+		<!-- Display Diet Preferences -->
+		<div class="mt-4">
+			<h2 class="text-xl font-semibold">Your Diet Preference(s):</h2>
+			<ul class="list-disc pl-6">
+				<li th:each="diet : ${dietPreferences}" th:text="${diet}"
+					class="text-gray-700"></li>
+			</ul>
+		</div>
+	</section>
 </body>
 </html>
