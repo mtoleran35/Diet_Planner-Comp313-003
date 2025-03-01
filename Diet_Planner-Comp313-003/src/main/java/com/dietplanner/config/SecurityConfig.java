@@ -23,12 +23,15 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/img/**").permitAll() // Public pages
                 .requestMatchers("/login", "/register").permitAll() // Allow login and registration
+                .requestMatchers("/privacy").permitAll() 
+                .requestMatchers("/contact").permitAll() 
                 .requestMatchers("/admin-dashboard", "/meals/**", "/img/**").hasRole("ADMIN") // Admin routes
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
                 .successHandler(authenticationSuccessHandler()) // Custom success handler
+		.failureUrl("/login?error=true") // Redirect to login with error param on failure
                 .permitAll()
             )
             .logout(logout -> logout
