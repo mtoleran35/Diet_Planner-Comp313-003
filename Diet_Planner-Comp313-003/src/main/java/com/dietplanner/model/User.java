@@ -39,7 +39,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password; // TODO: Encrypt before saving
 
-	public Long getId() {
+    public Long getId() {
 		return id;
 	}
 
