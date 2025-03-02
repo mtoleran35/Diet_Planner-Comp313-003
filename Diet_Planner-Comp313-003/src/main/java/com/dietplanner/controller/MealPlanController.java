@@ -1,6 +1,5 @@
 package com.dietplanner.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +43,23 @@ public class MealPlanController {
             
             //Get list of meals
             List<Meal> meals = mealPlanApiService.generateMealPlan(userInfo);
-            
+            //Get total values of macros
+            int totalCalories = 0;
+            int totalCarb = 0;
+            int totalFat = 0;
+            int totalProtein = 0;
+            for (Meal meal : meals) {
+            	totalCalories += meal.getCalories();
+            	totalCarb += meal.getCarbohydrate();
+            	totalFat += meal.getFat();
+            	totalProtein += meal.getProtein();
+            }
+            //Pass values to model
             model.addAttribute("meals", meals);
+            model.addAttribute("totalCalories", totalCalories);
+            model.addAttribute("totalCarb", totalCarb);
+            model.addAttribute("totalFat", totalFat);
+            model.addAttribute("totalProtein", totalProtein);
         }
 		return "fragments/meals";
 	}

@@ -43,11 +43,39 @@ public class PageController {
             User appUser = userService.findByUsername(userDetails.getUsername());
             List<Meal> meals = new ArrayList<>();
             
+            //Get user details to display appropriate help text
+            String dietPreference = appUser.getDietPreference();
+            double weight = appUser.getWeight();
+            int caloricIntakeGoal = appUser.getCaloricIntakeGoal();
+            
+            //Determine help text depending on diet preference
+            String helpText = "";
+            
+            switch(dietPreference) {
+            	case "HIGH PROTEIN":
+            		helpText = "Total protein amount should be at least >=  " + weight + "g";
+            		break;
+            	case "LOW CARB":
+            		helpText = "Total calories from carb should not exceed  " + (caloricIntakeGoal * .15) + " kcal (Within 15% of caloric intake goal) - Formula: Total Carb(g) * 4";
+            		break;
+            	case "KETO":
+            		helpText = "Total calories from fat should not exceed  " + (caloricIntakeGoal * .7) + " kcal (Within 70% of caloric intake goal) - Formula: Total Fat(g) * 9";
+            		break;
+            		
+            }
+            
+            //Pass values to model
             model.addAttribute("user", appUser);
             model.addAttribute("username", appUser.getUsername());
-            model.addAttribute("caloricIntakeGoal", appUser.getCaloricIntakeGoal());
-            model.addAttribute("dietPreference", appUser.getDietPreference());
+            model.addAttribute("caloricIntakeGoal", caloricIntakeGoal);
+            model.addAttribute("dietPreference", dietPreference);
+            model.addAttribute("helpText", helpText);
+            model.addAttribute("weight", weight);
             model.addAttribute("meals", meals);
+            model.addAttribute("totalCalories", 0);
+            model.addAttribute("totalCarb", 0);
+            model.addAttribute("totalFat", 0);
+            model.addAttribute("totalProtein", 0);
         }
         return "createplan"; // Renders create-plan.html
     }

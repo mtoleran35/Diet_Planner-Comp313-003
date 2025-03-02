@@ -32,10 +32,13 @@
         <section class="p-6 mt-6 bg-white shadow rounded-md">
 			<div>
 				<p>
-					<strong>Daily Caloric Intake Goal:</strong> <span th:text="${caloricIntakeGoal}"></span>
+					<strong>Daily Caloric Intake Goal:</strong> <span th:text="|${caloricIntakeGoal} kcal|"></span>
 				</p>
 				<p>
-					<strong>Diet Preference:</strong> <span th:text="${dietPreference}"></span>
+					<strong>Diet Preference:</strong> <span th:text="|${dietPreference} - ${helpText}|"></span>
+				</p>
+				<p>
+					<strong>Weight:</strong> <span th:text="|${weight} lbs|"></span>
 				</p>
 
 			</div>
@@ -45,18 +48,13 @@
 			<button th:hx-post="@{/createplan/generate-mealplan}" 
 				th:hx-target="@{#meals}"
 				th:hx-swap="@{outerHTML}"
-				class="text-blue-500 hover:underline">
+				class="rounded-md mb-4 bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2">
 				Generate Meal Plan
 			</button>
-			<!-- <form action="/createplan/generate-mealplan" method="post">
-				<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-					Generate Meal Plan
-				</button>
-			</form> -->
 		</div>
 		<!-- Table for list of meals -->
-		<div class="flex justify-center items-center mt-4">
-			<table id="meals" class="table-auto" th:replace="~{fragments/meals :: meals (meals=${meals})}"></table>
+		<div class="relative flex flex-col max-w-4xl mx-auto h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+			<table id="meals" class="table-auto w-full" th:replace="~{fragments/meals :: meals (meals=${meals})}"></table>
 		</div>
     </section>
 </body>

@@ -9,29 +9,78 @@
 		<table
 		  id="meals"
 		  th:fragment="meals (meals)"
-		  class="table-auto">
+		  class="table-auto w-full">
 		  <thead>
 		  	<tr>
-		  		<th>Meal Name</th>
-		  		<th>Calories</th>
-			  	<th>Carbohydrate</th>
-			  	<th>Fat</th>
-			  	<th>Protein</th>
+		  		<th class="p-4 border-b border-slate-300 bg-slate-50">
+		  			<p class="block text-sm font-normal leading-none text-slate-500">
+		                Meal Name
+		            </p>
+		  		</th>
+		  		<th class="p-4 border-b border-slate-300 bg-slate-50">
+		  			<p class="block text-sm font-normal leading-none text-slate-500">
+		                Calories (kcal)
+		            </p>
+		  		</th>
+		  		<th class="p-4 border-b border-slate-300 bg-slate-50">
+		  			<p class="block text-sm font-normal leading-none text-slate-500">
+		             	Carbohydrate (g)
+		            </p>
+		  		</th>
+		  		<th class="p-4 border-b border-slate-300 bg-slate-50">
+		  			<p class="block text-sm font-normal leading-none text-slate-500">
+		                Fat (g)
+		            </p>
+		  		</th>
+		  		<th class="p-4 border-b border-slate-300 bg-slate-50">
+		  			<p class="block text-sm font-normal leading-none text-slate-500">
+		                Protein (g)
+		            </p>
+		  		</th>
 		  	</tr>
 		  </thead>
 			  <!-- If the list is empty, display this message -->
 		      <tr th:if="${#lists.isEmpty(meals)}">
-		        <td colspan="5" style="text-align:center">Please click the "Generate Meal Plan" button to display potential meal plans</td>
+		        <td colspan="5" class="font-bold" style="text-align:center">Click the "Generate Meal Plan" button to display potential meal plans</td>
 		      </tr>
 		      
-			  <tr th:each="meal : ${meals}">
-				<td th:text="${meal.mealName}"></td>
-				<td th:text="${meal.calories}"></td>
-				<td th:text="${meal.carbohydrate}"></td>
-				<td th:text="${meal.fat}"></td>
-				<td th:text="${meal.protein}"></td>
+			  <tr class="hover:bg-slate-50" th:each="meal : ${meals}">
+				<td class="p-4 border-b border-slate-200 text-center">
+					<p th:text="${meal.mealName}"></p>
+				</td>
+				<td class="p-4 border-b border-slate-200 text-center">
+					<p th:text="${meal.calories}"></p>
+				</td>
+				<td class="p-4 border-b border-slate-200 text-center">
+					<p th:text="${meal.carbohydrate}"></p>
+				</td>
+				<td class="p-4 border-b border-slate-200 text-center">
+					<p th:text="${meal.fat}"></p>
+				</td>
+				<td class="p-4 border-b border-slate-200 text-center">
+					<p th:text="${meal.fat}"></p>
+				</td>
 			  </tr>
 		  </tbody>
+		  <tfoot>
+		  	<tr>
+		  		 <td colspan="1" class="p-4 text-center font-bold text-slate-800 border-t border-slate-300">
+		            Total:
+		         </td>
+		         <td colspan="1" class="p-4 text-center font-bold text-slate-800 border-t border-slate-300">
+		            <p th:text="${totalCalories} + ' kcal'"></p>
+		         </td>
+		         <td colspan="1" class="p-4 text-center font-bold text-slate-800 border-t border-slate-300">
+		            <p th:text="${totalCarb} + ' g'"></p>
+		         </td>
+		         <td colspan="1" class="p-4 text-center font-bold text-slate-800 border-t border-slate-300">
+		            <p th:text="${totalFat} + ' g'"></p>
+		         </td>
+		         <td colspan="1" class="p-4 text-center font-bold text-slate-800 border-t border-slate-300">
+		            <p th:text="${totalProtein} + ' g'"></p>
+		         </td>
+		  	</tr>
+		  </tfoot>
 		</table>
 	</body>
 </html>
