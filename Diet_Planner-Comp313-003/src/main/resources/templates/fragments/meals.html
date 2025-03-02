@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org">
+  <head>
+  	<script src="https://cdn.tailwindcss.com"></script>
+  </head>
+	<body>
+		<table
+		  id="meals"
+		  th:fragment="meals (meals)"
+		  class="table-auto">
+		  <thead>
+		  	<tr>
+		  		<th>Meal Name</th>
+		  		<th>Calories</th>
+			  	<th>Carbohydrate</th>
+			  	<th>Fat</th>
+			  	<th>Protein</th>
+		  	</tr>
+		  </thead>
+			  <!-- If the list is empty, display this message -->
+		      <tr th:if="${#lists.isEmpty(meals)}">
+		        <td colspan="5" style="text-align:center">Please click the "Generate Meal Plan" button to display potential meal plans</td>
+		      </tr>
+		      
+			  <tr th:each="meal : ${meals}">
+				<td th:text="${meal.mealName}"></td>
+				<td th:text="${meal.calories}"></td>
+				<td th:text="${meal.carbohydrate}"></td>
+				<td th:text="${meal.fat}"></td>
+				<td th:text="${meal.protein}"></td>
+			  </tr>
+		  </tbody>
+		</table>
+	</body>
+</html>

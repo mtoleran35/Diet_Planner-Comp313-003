@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.dietplanner.dto.Meal;
+import com.dietplanner.dto.UserInfo;
 
 @Service
 public class MealPlanApiService {
@@ -21,8 +22,8 @@ public class MealPlanApiService {
     }
     
     // Generate a meal plan
-    public List<Meal> generateMealPlan(){
-    	ResponseEntity<Meal[]> response = restTemplate.getForEntity(mealPlanServiceUrl, Meal[].class);
+    public List<Meal> generateMealPlan(UserInfo userInfo){
+    	ResponseEntity<Meal[]> response = restTemplate.postForEntity(mealPlanServiceUrl, userInfo, Meal[].class);
     	
     	if (response.getBody() == null) { 
             return Collections.emptyList(); // Return an empty list instead of null

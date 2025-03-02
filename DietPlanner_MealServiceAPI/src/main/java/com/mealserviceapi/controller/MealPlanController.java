@@ -3,11 +3,13 @@ package com.mealserviceapi.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mealserviceapi.model.Meal;
+import com.mealserviceapi.model.UserInfo;
 import com.mealserviceapi.service.MealPlanService;
 
 @RestController
@@ -17,8 +19,8 @@ public class MealPlanController {
 	@Autowired
 	MealPlanService mealPlanService;
 	
-	@GetMapping()
-	public List<Meal> generateMealPlan() {
+	@PostMapping()
+	public List<Meal> generateMealPlan(@RequestBody UserInfo userInfo) {
 		//Details should be from user account
 		
 		//HARD-CODED USER DETAILS
@@ -29,16 +31,8 @@ public class MealPlanController {
 		//Caloric Intake Goal
 		int caloricIntakeGoal = 2000;
 		
-		return mealPlanService.generateMealPlan(dietPreference,weight,caloricIntakeGoal); //Could pass Account model instead
+		return mealPlanService.generateMealPlan(userInfo); //Could pass Account model instead
 		
 	}
-	
-//	//Proper implementation
-//	@GetMapping()
-//	public List<Meal> getAllMealDetails(@RequestBody User currentUser) {
-//
-//		return mealPlanService.generateMealPlan(currentUser); //Could pass Account model instead
-//		
-//	}
 	
 }

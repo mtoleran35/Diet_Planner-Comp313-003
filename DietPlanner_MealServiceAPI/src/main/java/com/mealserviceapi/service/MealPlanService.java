@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mealserviceapi.model.Meal;
+import com.mealserviceapi.model.UserInfo;
 import com.mealserviceapi.repository.MealRepository;
 
 @Service
@@ -25,8 +26,14 @@ public class MealPlanService {
 	private int currentProtein;
 	
 	//Add logic here to generate meal plans
-	public List<Meal> generateMealPlan(String dietPreference, double weight, int caloricIntakeGoal) {
+	public List<Meal> generateMealPlan(UserInfo userInfo) {
 		
+		//Initialize user info
+		String dietPreference = userInfo.getDietPreference();
+		double weight = userInfo.getWeight();
+		int caloricIntakeGoal = userInfo.getCaloricIntakeGoal();
+		
+		//Initialize meal list
 		mealList = new ArrayList<Meal>();
 		
 		//Initialize variables of total calories and macros of valid meals
@@ -68,14 +75,14 @@ public class MealPlanService {
 				//Check diet preference
 				//Check if condition is met, depending on diet preference
 				//If condition is met, end loop
-				if (dietPreference.equals("High Protein"))
+				if (dietPreference.equals("HIGH PROTEIN"))
 				{
 				    //Check if protein is met
 				    if (currentProtein >= weight)
 				    {
 				        break;
 				    }
-				    else if (dietPreference.equals("Low Carb"))
+				    else if (dietPreference.equals("LOW CARB"))
 				    {
 				        //Check if carb is met (total calories from carbs should be within 15% of caloric intake goal)
 				        int carbCalories = currentCarb * 4;
@@ -84,7 +91,7 @@ public class MealPlanService {
 				            break;
 				        }
 				    }
-				    else if (dietPreference.equals("Ketogenic"))
+				    else if (dietPreference.equals("KETO"))
 				    {
 				        //Check if fat is met (total calories from fat should be within 70% of caloric intake goal)
 				        int fatCalories = currentFat * 9;
