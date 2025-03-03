@@ -1,6 +1,8 @@
 package com.dietplanner.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,23 +37,31 @@ public class PageController {
         return "settings";  // Load settings page
     }
 
-//    @GetMapping("/myplans")
-//    public String myPlansPage() {
-//        return "myplans"; // Renders my-plans.html
-//    }
-
     @GetMapping("/myplans")
     public String showMyPlansPage(@AuthenticationPrincipal UserDetails user, Model model) {
         User appUser = userService.findByUsername(user.getUsername());
+
+        // Fetch meal plans and daily totals
+        Map<String, Object> mealPlansData = mealPlanService.getUserMealPlans(appUser.getId());
+        List<MealPlan> mealPlans = (List<MealPlan>) mealPlansData.get("mealPlans");
+        Map<String, MealPlan> dailyTotals = (Map<String, MealPlan>) mealPlansData.get("dailyTotals");
+
+        // Use the fullname from the User entity
+        String fullname = appUser.getFullname();
         
-        List<MealPlan> mealPlans = mealPlanService.getUserMealPlans(appUser.getId()); // Fetch meal plans for the authenticated user
-        
+        // Debugging: Print mealPlans and dailyTotals in logs
+        System.out.println("Meal Plans Retrieved: " + mealPlans);
+        System.out.println("Daily Totals: " + dailyTotals);
+
+        // Add attributes to the model
         model.addAttribute("username", appUser.getUsername());
+        model.addAttribute("fullname", fullname); // Pass fullname to the template
         model.addAttribute("dietPreference", appUser.getDietPreference());
         model.addAttribute("caloricIntakeGoal", appUser.getCaloricIntakeGoal());
         model.addAttribute("weight", appUser.getWeight());
-        model.addAttribute("mealPlans", mealPlans); // Add meal plans to the model
-        
+        model.addAttribute("mealPlans", mealPlans);
+        model.addAttribute("dailyTotals", dailyTotals);
+
         return "myplans"; // Return the myplans.html view
     }    
     

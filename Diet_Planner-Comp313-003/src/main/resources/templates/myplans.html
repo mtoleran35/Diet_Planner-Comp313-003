@@ -13,7 +13,7 @@
             Dashboard
         </a>
         <div class="flex items-center space-x-4">
-            <span class="font-semibold" th:text="${username}"></span>
+            <span class="font-semibold" th:text="${fullname}"></span>
             <a href="/settings" class="text-blue-500 hover:underline">Settings</a>
             <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
             <a href="/logout" class="text-red-500 hover:underline">Logout</a>
@@ -28,7 +28,7 @@
 
         <!-- User Details -->
         <h1 class="text-3xl font-bold text-center">
-            Welcome, <span th:text="${username}"></span>
+            Welcome, <span th:text="${fullname}"></span>
         </h1>
         <p class="font-bold text-center text-gray-600">Daily Caloric Intake Goal: <span th:text="${caloricIntakeGoal}"></span> kcal</p>
         <p class="font-bold text-center text-gray-600">Diet Preference: <span th:text="${dietPreference}"></span></p>
@@ -62,26 +62,29 @@
             </div>
         </div>
 
-        <!-- Daily Details Card - Display only when meal plans exist -->
-        <div th:if="${#lists.size(mealPlans) > 0}" class="mt-8 bg-blue-100 p-6 shadow-md rounded-lg">
-            <h2 class="text-xl font-bold mb-2">Daily Details</h2>
-            <div class="flex justify-between items-center">
-                <p><strong>Total Calories (kcal):</strong></p>
-                <div class="bg-purple-200 px-4 py-1 rounded text-center w-24" th:text="${totalCalories}"></div>
-            </div>
-            <div class="flex justify-between items-center">
-                <p><strong>Total Carbohydrate (g):</strong></p>
-                <div class="bg-orange-200 px-4 py-1 rounded text-center w-24" th:text="${totalCarbohydrate}"></div>
-            </div>
-            <div class="flex justify-between items-center">
-                <p><strong>Total Fat (g):</strong></p>
-                <div class="bg-green-200 px-4 py-1 rounded text-center w-24" th:text="${totalFat}"></div>
-            </div>
-            <div class="flex justify-between items-center">
-                <p><strong>Total Protein (g):</strong></p>
-                <div class="bg-yellow-200 px-4 py-1 rounded text-center w-24" th:text="${totalProtein}"></div>
-            </div>
-        </div>
+		<!-- Daily Details Card - Display only when meal plans exist -->
+		<div th:if="${not #maps.isEmpty(dailyTotals)}" class="mt-8 bg-blue-100 p-6 shadow-md rounded-lg">
+		    <h2 class="text-xl font-bold mb-2">Daily Details</h2>
+		    <div th:each="dailyTotal : ${dailyTotals}">
+		        <h3 class="text-lg font-semibold mb-2" th:text="${dailyTotal.key}"></h3>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Calories (kcal):</strong></p>
+		            <div class="bg-purple-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalCalories}"></div>
+		        </div>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Carbohydrate (g):</strong></p>
+		            <div class="bg-orange-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalCarbohydrate}"></div>
+		        </div>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Fat (g):</strong></p>
+		            <div class="bg-green-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalFat}"></div>
+		        </div>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Protein (g):</strong></p>
+		            <div class="bg-yellow-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalProtein}"></div>
+		        </div>
+		    </div>
+		</div>
         
     </section>
 
