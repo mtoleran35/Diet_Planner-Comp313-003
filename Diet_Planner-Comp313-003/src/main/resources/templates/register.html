@@ -8,9 +8,11 @@
     <style>
         body {
             background-image: url('../img/imagewelcomee.png'); /* Replace with the correct path to your image */
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-size: cover; /* Ensures the image covers the entire background */
+            background-position: center center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents repeating the image */
+            background-attachment: fixed; /* Keeps the background fixed during scroll */
+            min-height: 100vh;
         }
 
         .fixed-size-container {
@@ -22,6 +24,37 @@
         
         .toggle-password {
             cursor: pointer;
+        }
+
+        /* Improved Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f7fafc;
+            color: #4a5568;
+            font-weight: bold;
+        }
+        td {
+            background-color: #ffffff;
+            color: #4a5568;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Added transparency for subtle background */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-top: 30px;
         }
     </style>
     
@@ -45,10 +78,19 @@
     </script>
 </head>
 <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 text-white shadow-lg py-3">
+        <div class="container mx-auto flex items-center px-6">
+            <a href="/" class="text-lg font-bold flex items-center">
+                <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+            </a>
+        </div>
+    </nav>
+
     <!-- Main Container -->
     <div class="min-h-screen flex items-center justify-center">
         <!-- Form Container -->
-        <div class="bg-white p-8 rounded-lg shadow-lg fixed-size-container">
+        <div class="form-container">
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold text-center mb-4">Welcome to the Personalized Diet Planner</h2>
                 <p class="text-gray-700">
@@ -139,6 +181,15 @@
                 Already have an account? <a href="/login" class="text-blue-500 hover:underline">Login here</a>
             </p>
         </div>
+    </div>  
+   <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+    <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+        <p>&copy; 2025 Diet Planner |</p>
+<a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
+        <span class="text-gray-400">|</span>
+<a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
     </div>
+</footer>
+    
 </body>
 </html>
