@@ -21,17 +21,8 @@ public class MealPlanController {
 	
 	@PostMapping()
 	public List<Meal> generateMealPlan(@RequestBody UserInfo userInfo) {
-		//Details should be from user account
-		
-		//HARD-CODED USER DETAILS
-		//Diet Preference
-		String dietPreference = "High Protein";
-		//Weight
-		double weight = 152;
-		//Caloric Intake Goal
-		int caloricIntakeGoal = 2000;
-		
-		return mealPlanService.generateMealPlan(userInfo); //Could pass Account model instead
+		//Takes user info and uses it as basis to generate meal plan
+		return mealPlanService.generateMealPlan(userInfo); 
 		
 	}
 	
