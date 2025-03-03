@@ -1,62 +1,153 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Dashboard</title>
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fade In Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Slide In for Titles */
+        .slide-in-title {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInTitle 1.5s ease-out forwards;
+        }
+
+        @keyframes slideInTitle {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Smooth Fade for Paragraphs */
+        .fade-in-paragraph {
+            opacity: 0;
+            animation: fadeInParagraph 2s ease-out forwards;
+        }
+
+        @keyframes fadeInParagraph {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Fade In and Fade Out for "Manage your meal..." text */
+        .fade-in-out {
+            opacity: 0;
+            animation: fadeInOut 4s ease-in-out forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Smooth List Animation */
+        .fade-in-list {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInList 2s ease-out forwards;
+        }
+
+        @keyframes fadeInList {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bounce Animation for Save Meal Plans */
+        .bounce-in {
+            animation: bounceIn 2s ease-in-out forwards;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Background Image */
+        body {
+            background-image: url('../img/imagewelcomee.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
-	<!-- Navbar -->
-	<nav class="flex justify-between items-center p-4 shadow bg-white">
-		<a href="/" class="text-lg font-bold flex items-center"> <img
-			src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
-		</a>
-		<div class="flex items-center space-x-4">
-			<span class="font-semibold" th:text="${firstName + ' ' + lastName}"></span>
-			<a	href="/settings" class="text-blue-500 hover:underline">Settings</a>
-			<a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
-			<a href="/createplan" class="text-blue-500 hover:underline">Create
-				Plan</a> <a href="/logout" class="text-red-500 hover:underline">Logout</a>
-		</div>
-	</nav>
+<body class="text-gray-900">
 
-	<!-- Dashboard Content -->
-	<section class="p-6">
-		<h1 class="text-3xl font-bold">
-			Welcome, <span th:text="${firstName + ' ' + lastName}"></span>
-		</h1>
-		<p class="text-gray-600 mt-2">Manage your meal plans and track
-			your diet goals.</p>
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-4 shadow bg-white">
+        <a href="/" class="text-lg font-bold flex items-center">
+            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+        </a>
+        <div class="flex items-center space-x-4">
+            <span class="font-semibold" th:text="${firstName + ' ' + lastName}"></span>
+            <a href="/settings" class="text-blue-500 hover:underline">My Account</a>
+            <a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
+            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
+            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+        </div>
+    </nav>
 
-		<!-- alice - added the display of user registration details and diet
-		preferences -->
-		
-		<!-- Registration Details -->
+    <!-- Dashboard Content -->
+    <section class="max-w-lg mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg fade-in">
+        <h1 class="text-4xl font-extrabold text-center slide-in-title">
+            Welcome, <span th:text="${firstName + ' ' + lastName}"></span>
+        </h1>
+        <p class="text-gray-600 mt-4 text-center fade-in-paragraph">
+            <span class="fade-in-out">Manage your meal plans and track your diet goals.</span>
+        </p>
 
-		<section class="p-6 mt-6 bg-white shadow rounded-md">
+        <!-- Registration Details -->
+        <div class="p-8 mt-6 bg-blue-50 border border-blue-300 shadow-md rounded-md fade-in">
+            <p><strong>Username:</strong> <span th:text="${username}"></span></p>
+            <p><strong>Weight:</strong> <span th:text="${weight}"></span></p>
+            <p><strong>Caloric Intake Goal:</strong> <span th:text="${caloricIntakeGoal}"></span></p>
+            <p><strong>Diet Preference:</strong> <span th:text="${dietPreferences}"></span></p>
+        </div>
 
-			<div class="mt-4">
-				<p>
-					<strong>Username:</strong> <span th:text="${username}"></span>
-				</p>
-				<p>
-					<strong>Weight:</strong> <span th:text="${weight}"></span>
-				</p>
-				<p>
-					<strong>Caloric Intake Goal:</strong> <span
-						th:text="${caloricIntakeGoal}"></span>
-				</p>
+        <!-- Saved Meal Plans -->
+        <div class="mt-8 bounce-in">
+            <h2 class="text-2xl font-semibold">List of Saved Meal Plan(s):</h2>
+            <ul class="list-disc pl-6">
+                <li th:each="myPlan : ${myplans}" th:text="${myPlan}" class="text-gray-700 mt-2"></li>
+            </ul>
+        </div>
+    </section>
 
-			</div>
-		</section>
-
-		<!-- Display Diet Preferences -->
-		<div class="mt-4">
-			<h2 class="text-xl font-semibold">Your Diet Preference(s):</h2>
-			<ul class="list-disc pl-6">
-				<li th:each="diet : ${dietPreferences}" th:text="${diet}"
-					class="text-gray-700"></li>
-			</ul>
-		</div>
-	</section>
 </body>
 </html>
