@@ -31,6 +31,7 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .successHandler(authenticationSuccessHandler()) // Custom success handler
+		.failureUrl("/login?error=true") // Redirect to login with error param on failure
                 .permitAll()
             )
             .logout(logout -> logout

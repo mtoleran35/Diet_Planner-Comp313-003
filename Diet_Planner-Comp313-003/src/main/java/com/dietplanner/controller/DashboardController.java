@@ -22,6 +22,14 @@ public class DashboardController {
         User appUser = userService.findByUsername(user.getUsername());
         model.addAttribute("username", appUser.getUsername());
 
+     // Add user attributes to the model
+        model.addAttribute("username", appUser.getUsername());
+        model.addAttribute("firstName", appUser.getFirstName());
+        model.addAttribute("lastName", appUser.getLastName());
+        model.addAttribute("weight", appUser.getWeight());
+        model.addAttribute("caloricIntakeGoal", appUser.getCaloricIntakeGoal());
+        model.addAttribute("dietPreferences", appUser.getDietPreference()); // Ensure this is a List<String> if multiple
+
         if ("ADMIN".equalsIgnoreCase(appUser.getAccounttype())) {
             return "redirect:/admin-dashboard"; // Redirect to admin dashboard if ADMIN
         } else {
