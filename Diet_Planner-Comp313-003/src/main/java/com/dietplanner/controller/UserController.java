@@ -1,7 +1,12 @@
 package com.dietplanner.controller;
 
+import com.dietplanner.model.MealPlan;
+import com.dietplanner.service.MealPlanService;
 import com.dietplanner.model.User;
 import com.dietplanner.service.UserService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+  
+    @Autowired
+    private MealPlanService mealPlanService;    
   
     @GetMapping("/register")
     public String showRegisterPage() {
@@ -34,18 +42,7 @@ public class UserController {
             return "register"; // Reload registration page with error message
         }
     }
-
-//    @PostMapping("/register")
-//    public String registerUser(@ModelAttribute User user) {
-//        // Set default user role
-//        user.setAccounttype("USER");
-//
-//        // Save user (UserService will handle hashing)
-//        userService.saveUser(user);
-//
-//        return "redirect:/login";
-//    }
-    
+  
     @PostMapping("/update-profile")
     public String updateProfile(@AuthenticationPrincipal UserDetails user, @ModelAttribute User updatedUser) {
         //String username = principal.getName();
