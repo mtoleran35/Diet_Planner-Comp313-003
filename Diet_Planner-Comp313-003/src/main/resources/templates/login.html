@@ -4,42 +4,57 @@
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Ensure that the image is below the login container */
         .bg-image {
             background-image: url('/img/imagewelcomee.png');
             background-size: cover;
             background-position: center;
             position: absolute;
-            inset: 0; /* This will cover the entire screen */
-            z-index: 0; /* Place the image behind other content */
+            inset: 0; 
+            z-index: -1; 
         }
         .form-container {
             position: relative;
-            z-index: 10; /* Place the form above the image */
+            z-index: 10; 
+            background-color: rgba(255, 255, 255, 0.9); 
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-top: 30px;
+        }
+        nav {
+            position: relative;
+            z-index: 20;
         }
     </style>    
 </head>
 <body class="bg-gray-100">
 
+    <!-- Navbar -->
+    <nav class="bg-gray-800 text-white shadow-lg py-3">
+        <div class="container mx-auto flex items-center px-6">
+            <a href="/" class="text-lg font-bold flex items-center">
+                <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+            </a>
+        </div>
+    </nav>
+
     <!-- Background Image -->
     <div class="bg-image"></div>
 
     <!-- Main Container -->
-    
     <div class="min-h-screen flex items-center justify-center">
         <!-- Form Container -->
-        <div class="form-container bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div class="form-container w-full max-w-md">
             <h2 class="text-2xl font-bold text-center mb-6">Login to Your Account</h2>
 
-	    <!-- Display Error Message
-            <div th:if="${errorMessage}" class="mb-4 text-red-500 text-sm" th:text="${errorMessage}"></div> -->
+            <!-- Display Error Message -->
             <div th:if="${errorMessage}" class="text-red-500 text-sm mb-4">
                 <p th:text="${errorMessage}"></p>
             </div>
             
             <!-- Login Form -->
             <form action="/login" method="post">
-   				 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <!-- Username -->
                 <div class="mb-4">
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -62,5 +77,14 @@
             </p>
         </div>
     </div>
+    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+            <p>&copy; 2025 Diet Planner |</p>
+            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
+            <span class="text-gray-400">|</span>
+            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
+        </div>
+    </footer>
+    
 </body>
 </html>
