@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.dietplanner.dto.Meal;
+import com.dietplanner.dto.UserInfo;
 import com.dietplanner.model.User;
 import com.dietplanner.service.UserService;
 
@@ -42,6 +43,13 @@ public class PageController {
     	if (userDetails != null) {
             User appUser = userService.findByUsername(userDetails.getUsername());
             List<Meal> meals = new ArrayList<>();
+            
+            //Create userInfo dto to store needed user info for generating a meal plan
+            UserInfo userInfo = new UserInfo();
+            userInfo.setId(appUser.getId());
+            userInfo.setDietPreference(appUser.getDietPreference());
+            userInfo.setWeight(appUser.getWeight());
+            userInfo.setCaloricIntakeGoal(appUser.getCaloricIntakeGoal());
             
             //Get user details to display appropriate help text
             String dietPreference = appUser.getDietPreference();
@@ -76,6 +84,8 @@ public class PageController {
             model.addAttribute("totalCarb", 0);
             model.addAttribute("totalFat", 0);
             model.addAttribute("totalProtein", 0);
+            //Pass userInfo to model. To be used in saving meal plan
+            model.addAttribute("userInfo", userInfo);
         }
         return "createplan"; // Renders create-plan.html
     }
