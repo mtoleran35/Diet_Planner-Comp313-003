@@ -20,9 +20,4 @@ public class MealPlan {
     private Integer mealQuantity;
     private String assignedDay;
     
-    // New fields for daily totals
-    private Integer totalCalories = 0;
-    private Integer totalCarbohydrate = 0;
-    private Integer totalProtein = 0;
-    private Integer totalFat = 0;
 }
