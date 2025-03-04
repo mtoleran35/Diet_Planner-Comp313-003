@@ -8,6 +8,11 @@
         th:crossorigin="@{anonymous}"></script>
     <meta name="csrf-token" th:content="${_csrf.token}" />
 	<meta name="csrf-header" th:content="${_csrf.headerName}" />
+	<style>
+	    input[type="checkbox"] {
+	        transform: scale(1.5); /* Increase the size by 1.5 times */
+	    }
+	</style>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <nav class="flex justify-between items-center p-4 shadow bg-white">
@@ -43,18 +48,53 @@
 
 			</div>
 		</section>
-		<!-- Generate Meal Plan button -->
+		
+		<!-- Table label -->
 		<div class="flex justify-center items-center mt-4">
-			<button th:hx-post="@{/createplan/generate-mealplan}" 
-				th:hx-target="@{#meals}"
-				th:hx-swap="@{outerHTML}"
-				class="rounded-md mb-4 bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2">
-				Generate Meal Plan
-			</button>
+			<h1 class="text-3xl mb-4 font-bold">Potential Meal Plan</h1>
 		</div>
+		
 		<!-- Table for list of meals -->
 		<div class="relative flex flex-col max-w-4xl mx-auto h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
 			<table id="meals" class="table-auto w-full" th:replace="~{fragments/meals :: meals (meals=${meals})}"></table>
+		</div>
+		
+		<!-- Meal Plan Form START-->
+		<div class="flex justify-center items-center mt-4">
+			<form th:action="@{/createplan/save-mealplan}" th:object="${userInfo}" method="post">
+			
+				<!-- Checkboxes for the days of week -->
+				<div class="flex justify-center items-center mt-2 mb-4">
+					<label><strong>Meal Plan Day Preference:</strong></label>
+				</div>
+				<div class="flex justify-center items-center mt-2 mb-4">
+					<!-- Select/Deselect All -->
+					<input class="mr-2 ml-2" type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)" /> Select All
+					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Monday" /> Monday
+					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Tuesday" /> Tuesday
+					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Wednesday" /> Wednesday
+					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Thursday" /> Thursday
+					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Friday" /> Friday
+					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Saturday" /> Saturday
+					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Sunday" /> Sunday
+				</div>
+				
+				<!-- Buttons -->
+				<div class="flex justify-center items-center mt-2 mb-4">
+					<!-- Generate Meal Plan button -->
+					<button th:hx-post="@{/createplan/generate-mealplan}" 
+						th:hx-target="@{#meals}"
+						th:hx-swap="@{outerHTML}"
+						class="rounded-md mb-4 bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2">
+						Generate Meal Plan
+					</button>
+			
+					<!-- Save Meal Plan button -->
+					<button type="submit" class="rounded-md mb-4 bg-green-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700 hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" >
+					  Save Meal Plan
+					</button>
+				</div>
+			</form> <!-- Meal Plan Form END -->
 		</div>
     </section>
 </body>
@@ -70,6 +110,31 @@
 				    }
 				  }
 				});
+			
+			// JavaScript function to toggle all checkboxes
+		    function toggleCheckboxes(selectAllCheckbox) {
+		        var checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#selectAll)');
+		        checkboxes.forEach(function(checkbox) {
+		            checkbox.checked = selectAllCheckbox.checked;
+		        });
+		    }
+			
+		    function updateSelectAllState() {
+		        var checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#selectAll)');
+		        var allChecked = true;
+		        checkboxes.forEach(function(checkbox) {
+		            if (!checkbox.checked) {
+		                allChecked = false;
+		            }
+		        });
+
+		        document.getElementById('selectAll').checked = allChecked;
+		    }
+
+		    // Add event listeners to each checkbox to update "Select All" state
+		    document.querySelectorAll('input[type="checkbox"]:not(#selectAll)').forEach(function(checkbox) {
+		        checkbox.addEventListener('change', updateSelectAllState);
+		    });
 	</script>
 	
 </html>

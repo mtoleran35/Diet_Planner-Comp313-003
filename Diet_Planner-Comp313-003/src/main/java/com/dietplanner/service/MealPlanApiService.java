@@ -31,4 +31,12 @@ public class MealPlanApiService {
     	
     	return Arrays.asList(response.getBody());
     }
+    
+    // Save meal plan
+    public void saveMealPlan(UserInfo userInfo) {
+    	String url = mealPlanServiceUrl + "/savemealplan";
+    	
+    	restTemplate.postForEntity(url, userInfo, UserInfo.class);
+    }
+    
 }

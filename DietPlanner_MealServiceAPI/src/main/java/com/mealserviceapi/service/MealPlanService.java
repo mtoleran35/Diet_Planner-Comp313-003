@@ -1,5 +1,7 @@
 package com.mealserviceapi.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,7 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mealserviceapi.model.Meal;
+import com.mealserviceapi.model.MealPlan;
+import com.mealserviceapi.model.MealPlanDetail;
 import com.mealserviceapi.model.UserInfo;
+import com.mealserviceapi.repository.MealPlanDetailRepository;
+import com.mealserviceapi.repository.MealPlanRepository;
 import com.mealserviceapi.repository.MealRepository;
 
 @Service
@@ -16,6 +22,12 @@ public class MealPlanService {
 
 	@Autowired
 	private MealRepository mealRepository;
+	
+	@Autowired
+	private MealPlanRepository mealPlanRepository;
+	
+	@Autowired
+	private MealPlanDetailRepository mealPlanDetailRepository;
 	
 	//List of meals to store the generated meal plans
 	List<Meal> mealList;
@@ -119,4 +131,53 @@ public class MealPlanService {
 		
 		return mealList;
 	}
+	
+	//Save meal plan function
+	public void saveMealPlan(UserInfo userInfo) {
+		//From form: list of meals, selected days
+		//From user: id
+		
+		//Get user id
+		Long accountId = userInfo.getId();
+		
+		//Get local date to create meal plan name
+		LocalDate today = LocalDate.now();
+		String dateToday = today.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+		String mealPlanName = userInfo.getDietPreference() + "_" + dateToday;
+		
+		//Get list of meals from user info
+		List<Meal> meals = userInfo.getMealPlan();
+		
+		//Get total values of macros
+		int totalCalories = 0;
+		int totalCarb = 0;
+		int totalFat = 0;
+		int totalProtein = 0;
+		
+		for (Meal meal : meals) {
+			totalCalories += meal.getCalories();
+        	totalCarb += meal.getCarbohydrate();
+        	totalFat += meal.getFat();
+        	totalProtein += meal.getProtein();
+        }
+		
+		//Save new meal plan into meal_plan table
+		MealPlan newMealPlan = new MealPlan(accountId,mealPlanName,totalCalories,totalCarb,totalFat,totalProtein);
+		mealPlanRepository.save(newMealPlan);
+		
+		//Get latest meal_plan id
+		MealPlan latestMealPlan = mealPlanRepository.findFirstByAccountIdOrderByMealPlanIdDesc(accountId);
+		
+		//Insert into meal_plan_detail table, with latest meal_plan id
+		//Involves nested for loop in list of meals and list of selected days, to insert each meal
+		
+		//List of selected days for the meal plan
+		List<String> selectedDays = userInfo.getSelectedDays();
+		for (Meal meal : meals) {
+			for (String day : selectedDays) {
+				MealPlanDetail mealPlanDetail = new MealPlanDetail(meal.getMealId(),1,day,latestMealPlan);
+				mealPlanDetailRepository.save(mealPlanDetail);
+			}
+		}
+	} 
 }

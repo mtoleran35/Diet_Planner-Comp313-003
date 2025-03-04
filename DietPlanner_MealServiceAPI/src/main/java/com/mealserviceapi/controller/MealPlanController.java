@@ -23,7 +23,11 @@ public class MealPlanController {
 	public List<Meal> generateMealPlan(@RequestBody UserInfo userInfo) {
 		//Takes user info and uses it as basis to generate meal plan
 		return mealPlanService.generateMealPlan(userInfo); 
-		
+	}
+	
+	@PostMapping("/savemealplan")
+	public void saveMealPlan(@RequestBody UserInfo userInfo) {
+		mealPlanService.saveMealPlan(userInfo);
 	}
 	
 }

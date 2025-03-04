@@ -7,12 +7,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.dietplanner.dto.Meal;
 import com.dietplanner.dto.UserInfo;
 import com.dietplanner.model.User;
+import com.dietplanner.service.MealApiService;
 import com.dietplanner.service.MealPlanApiService;
 import com.dietplanner.service.UserService;
 
@@ -21,11 +23,17 @@ import com.dietplanner.service.UserService;
 public class MealPlanController {
 	private final MealPlanApiService mealPlanApiService;
 	
+	private final MealApiService mealApiService;
+	
 	@Autowired
     private UserService userService;
 	
-	public MealPlanController(MealPlanApiService mealPlanApiService) {
+	//Workaround
+	private List<Meal> updatedMealList;
+	
+	public MealPlanController(MealPlanApiService mealPlanApiService, MealApiService mealApiService) {
 		this.mealPlanApiService = mealPlanApiService;
+		this.mealApiService = mealApiService;
 	}
 	
 	@PostMapping("/generate-mealplan")
@@ -43,6 +51,10 @@ public class MealPlanController {
             
             //Get list of meals
             List<Meal> meals = mealPlanApiService.generateMealPlan(userInfo);
+            
+            //Workaround
+            updatedMealList = meals;
+            
             //Get total values of macros
             int totalCalories = 0;
             int totalCarb = 0;
@@ -62,5 +74,23 @@ public class MealPlanController {
             model.addAttribute("totalProtein", totalProtein);
         }
 		return "fragments/meals";
+	}
+	
+	@PostMapping("/save-mealplan")
+	public String saveMealPlanForm(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute UserInfo userInfo) {
+		//Convert the list of meals in userInfo from String to Meal
+		UserInfo updatedUserInfo = userInfo;
+		
+		//SYSLOG
+		//System.out.println("---SIZE--- " + userInfo.getSelectedDays().size());
+		System.out.println("---SIZE--- " + updatedMealList.size()); //Workaround
+		
+		updatedUserInfo.setMealPlan(updatedMealList);
+		
+		//Call save meal plan function
+		mealPlanApiService.saveMealPlan(updatedUserInfo);
+		
+		//Load createplan page after saving
+		return "redirect:/createplan";
 	}
 }
