@@ -3,12 +3,32 @@
 <head>
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ensure that the image is below the login container */
+        .bg-image {
+            background-image: url('/img/imagewelcomee.png');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            inset: 0; /* This will cover the entire screen */
+            z-index: 0; /* Place the image behind other content */
+        }
+        .form-container {
+            position: relative;
+            z-index: 10; /* Place the form above the image */
+        }
+    </style>    
 </head>
 <body class="bg-gray-100">
+
+    <!-- Background Image -->
+    <div class="bg-image"></div>
+
     <!-- Main Container -->
+    
     <div class="min-h-screen flex items-center justify-center">
         <!-- Form Container -->
-        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div class="form-container bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
             <h2 class="text-2xl font-bold text-center mb-6">Login to Your Account</h2>
 
 	    <!-- Display Error Message
