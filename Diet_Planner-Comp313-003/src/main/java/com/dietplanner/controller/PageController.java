@@ -20,13 +20,13 @@ import com.dietplanner.service.MealPlanService;
 
 @Controller
 public class PageController {
-	
-	@Autowired
+
+    @Autowired
     private UserService userService;
 
     @Autowired
-    private MealPlanService mealPlanService;	
-    
+    private MealPlanService mealPlanService;
+
     // Display settings page with current user details
     @GetMapping("/settings")
     public String settingsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -49,7 +49,7 @@ public class PageController {
 
         // Use the fullname from the User entity
         String fullname = appUser.getFullname();
-        
+
         // Debugging: Print mealPlans and dailyTotals in logs
         System.out.println("Meal Plans Retrieved: " + mealPlans);
         System.out.println("Daily Totals: " + dailyTotals);
@@ -64,37 +64,36 @@ public class PageController {
         model.addAttribute("dailyTotals", dailyTotals);
 
         return "myplans"; // Return the myplans.html view
-    }    
-    
+    }
+
     @GetMapping("/createplan")
     public String createPlanPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-    	//Pass user info to model object, then display on page
-    	if (userDetails != null) {
+        // Pass user info to model object, then display on page
+        if (userDetails != null) {
             User appUser = userService.findByUsername(userDetails.getUsername());
             List<Meal> meals = new ArrayList<>();
-            
-            //Get user details to display appropriate help text
+
+            // Get user details to display appropriate help text
             String dietPreference = appUser.getDietPreference();
             double weight = appUser.getWeight();
             int caloricIntakeGoal = appUser.getCaloricIntakeGoal();
-            
-            //Determine help text depending on diet preference
+
+            // Determine help text depending on diet preference
             String helpText = "";
-            
-            switch(dietPreference) {
-            	case "HIGH PROTEIN":
-            		helpText = "Total protein amount should be at least >=  " + weight + "g";
-            		break;
-            	case "LOW CARB":
-            		helpText = "Total calories from carb should not exceed  " + (caloricIntakeGoal * .15) + " kcal (Within 15% of caloric intake goal) - Formula: Total Carb(g) * 4";
-            		break;
-            	case "KETO":
-            		helpText = "Total calories from fat should not exceed  " + (caloricIntakeGoal * .7) + " kcal (Within 70% of caloric intake goal) - Formula: Total Fat(g) * 9";
-            		break;
-            		
+
+            switch (dietPreference) {
+                case "HIGH PROTEIN":
+                    helpText = "Total protein amount should be at least >= " + weight + "g";
+                    break;
+                case "LOW CARB":
+                    helpText = "Total calories from carb should not exceed " + (caloricIntakeGoal * .15) + " kcal (Within 15% of caloric intake goal) - Formula: Total Carb(g) * 4";
+                    break;
+                case "KETO":
+                    helpText = "Total calories from fat should not exceed " + (caloricIntakeGoal * .7) + " kcal (Within 70% of caloric intake goal) - Formula: Total Fat(g) * 9";
+                    break;
             }
-            
-            //Pass values to model
+
+            // Pass values to model
             model.addAttribute("user", appUser);
             model.addAttribute("username", appUser.getUsername());
             model.addAttribute("caloricIntakeGoal", caloricIntakeGoal);
@@ -109,5 +108,4 @@ public class PageController {
         }
         return "createplan"; // Renders create-plan.html
     }
-
 }
