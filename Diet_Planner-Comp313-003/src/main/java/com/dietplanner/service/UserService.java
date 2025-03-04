@@ -43,20 +43,12 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-//  comment  
-  //  public User saveUser(User user) {
-//        if (!user.getPassword().startsWith("$argon2id$")) { // Ensure password is hashed
-//            user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        }
-//        return userRepository.save(user);
-//    }
-
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
     
- // Method to get the current logged-in user
+    // Method to get the current logged-in user
     public User getUserDetails() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return findByUsername(username); // Fetch the user by username from the database
