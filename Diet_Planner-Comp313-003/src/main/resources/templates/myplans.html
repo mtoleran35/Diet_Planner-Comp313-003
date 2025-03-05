@@ -1,74 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>My Meal Plans</title>
+    <title>View Meal Plans</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 <body class="bg-gray-100 text-gray-900">
+
+    <!-- Navigation -->
     <nav class="flex justify-between items-center p-4 shadow bg-white">
         <a href="/dashboard" class="text-lg font-bold flex items-center">
-            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Dashboard
+            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2">
+            Dashboard
         </a>
-		<div class="flex items-center space-x-4">
-           <span class="font-semibold" th:text="${username}"></span>
-           <a href="/settings" class="text-blue-500 hover:underline">Settings</a>
-           <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
-           <a href="/logout" class="text-red-500 hover:underline">Logout</a>
-       	</div>
+        <div class="flex items-center space-x-4">
+            <span class="font-semibold" th:text="${fullname}"></span>
+            <a href="/settings" class="text-blue-500 hover:underline">Settings</a>
+            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
+            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+        </div>
     </nav>
 
-    <!-- Page Content -->    
+    <!-- Page Content -->
     <section class="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg mt-6">
-        <h1 class="text-3xl font-bold text-center">Welcome, <span th:text="${username}"></span></h1>
-        <p class="text-center text-gray-600">Diet Preference: <span th:text="${dietPreference}"></span></p>
-        <p class="text-center text-gray-600">Caloric Intake Goal: <span th:text="${caloricIntakeGoal}"></span> kcal</p>
-        <p class="text-center text-gray-600">Weight: <span th:text="${weight}"></span> kg</p>
 
-        <div class="mt-6">
-            <h2 class="text-2xl font-bold mb-4">Meal Plans</h2>
-            <table class="w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border p-2">Meal Name</th>
-                        <th class="border p-2">Calories</th>
-                        <th class="border p-2">Carbs</th>
-                        <th class="border p-2">Protein</th>
-                        <th class="border p-2">Fat</th>
-                        <th class="border p-2">Assigned Day</th>
-                    </tr>
-                </thead>
-				<tbody>
-					    <!-- <tr th:each="mealPlan : ${mealPlans}">
-					        <td th:text="${mealPlan.mealPlanName}"></td>
-					        <td th:text="${mealPlan.totalCalories}"></td>
-					        <td th:text="${mealPlan.totalCarbohydrate}"></td>
-					        <td th:text="${mealPlan.totalProtein}"></td>
-					        <td th:text="${mealPlan.totalFat}"></td>
-					        <td th:text="${mealPlan.assignedDay}"></td>
-					    </tr> -->
-			    	<tr th:each="mealPlan : ${mealPlans}">
-			        	<td th:text="${mealPlan.mealName}"></td>
-        				<td th:text="${mealPlan.calories}"></td>
-        				<td th:text="${mealPlan.carbohydrate}"></td>
-        				<td th:text="${mealPlan.protein}"></td>
-        				<td th:text="${mealPlan.fat}"></td>
-        				<td th:text="${mealPlan.assignedDay}"></td>
-    				</tr>					    
-				</tbody>
-                
-<!--                 <tbody> -->
-<!--                     <tr th:each="meal : ${mealPlans}"> -->
-<!--                         <td class="border p-2" th:text="${meal.mealName}"></td> -->
-<!--                         <td class="border p-2" th:text="${meal.mealCalories}"></td> -->
-<!--                         <td class="border p-2" th:text="${meal.mealCarbohydrate}"></td> -->
-<!--                         <td class="border p-2" th:text="${meal.mealProtein}"></td> -->
-<!--                         <td class="border p-2" th:text="${meal.mealFat}"></td> -->
-<!--                         <td class="border p-2" th:text="${meal.assignedDay}"></td> -->
-<!--                     </tr> -->
-<!--                 </tbody> -->
-            </table>
+        <!-- Meal Graphic Banner -->
+        <div class="w-full h-40 bg-cover bg-center rounded-lg mb-6" style="background-image: url('/img/meal-banner.jpg');"></div>
+
+        <!-- User Details -->
+        <h1 class="text-3xl font-bold text-center">
+            Welcome, <span th:text="${fullname}"></span>
+        </h1>
+        <p class="font-bold text-center text-gray-600">Daily Caloric Intake Goal: <span th:text="${caloricIntakeGoal}"></span> kcal</p>
+        <p class="font-bold text-center text-gray-600">Diet Preference: <span th:text="${dietPreference}"></span></p>
+        <p class="font-bold text-center text-gray-600">Weight: <span th:text="${weight}"></span> kg</p>
+
+        <!-- Assigned Day -->
+        <h2 class="text-2xl font-bold text-center mt-8 mb-4" th:if="${not #lists.isEmpty(mealPlans)}">
+            Your <span th:text="${mealPlans[0].assignedDay}"></span> Meals
+        </h2>
+
+        <!-- Meal Cards - Display only if there are meal plans -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div th:each="mealPlan : ${mealPlans}" th:if="${mealPlan.mealName != null}" class="bg-gray-50 p-4 shadow-md rounded-lg">
+                <h3 class="text-xl font-bold mb-2" th:text="${mealPlan.mealName}"></h3>
+                <div class="flex justify-between items-center">
+                    <p class="text-gray-700"><strong>Calories (kcal):</strong></p>
+                    <div class="bg-purple-200 px-4 py-1 rounded text-center w-24" th:text="${mealPlan.calories}"></div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-gray-700"><strong>Carbohydrate (g):</strong></p>
+                    <div class="bg-orange-200 px-4 py-1 rounded text-center w-24" th:text="${mealPlan.carbohydrate}"></div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-gray-700"><strong>Fat (g):</strong></p>
+                    <div class="bg-green-200 px-4 py-1 rounded text-center w-24" th:text="${mealPlan.fat}"></div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <p class="text-gray-700"><strong>Protein (g):</strong></p>
+                    <div class="bg-yellow-200 px-4 py-1 rounded text-center w-24" th:text="${mealPlan.protein}"></div>
+                </div>
+            </div>
         </div>
+
+		<!-- Daily Details Card - Display only when meal plans exist -->
+		<div th:if="${not #maps.isEmpty(dailyTotals)}" class="mt-8 bg-blue-100 p-6 shadow-md rounded-lg">
+		    <h2 class="text-xl font-bold mb-2">Daily Details</h2>
+		    <div th:each="dailyTotal : ${dailyTotals}">
+		        <h3 class="text-lg font-semibold mb-2" th:text="${dailyTotal.key}"></h3>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Calories (kcal):</strong></p>
+		            <div class="bg-purple-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalCalories}"></div>
+		        </div>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Carbohydrate (g):</strong></p>
+		            <div class="bg-orange-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalCarbohydrate}"></div>
+		        </div>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Fat (g):</strong></p>
+		            <div class="bg-green-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalFat}"></div>
+		        </div>
+		        <div class="flex justify-between items-center">
+		            <p><strong>Total Protein (g):</strong></p>
+		            <div class="bg-yellow-200 px-4 py-1 rounded text-center w-24" th:text="${dailyTotal.value.totalProtein}"></div>
+		        </div>
+		    </div>
+		</div>
+        
     </section>
 
 </body>

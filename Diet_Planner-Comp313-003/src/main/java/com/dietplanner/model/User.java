@@ -39,6 +39,11 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password; // TODO: Encrypt before saving
 
+    // Add a method to get the full name
+    public String getFullname() {
+        return firstName + " " + lastName;
+    }
+    
 	public Long getId() {
 		return id;
 	}
