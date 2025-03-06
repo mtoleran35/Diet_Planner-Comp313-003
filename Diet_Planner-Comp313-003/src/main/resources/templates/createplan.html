@@ -20,7 +20,7 @@
             <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Dashboard
         </a>
 		<div class="flex items-center space-x-4">
-           <span class="font-semibold" th:text="${username}"></span>
+           <span class="font-semibold" th:text="${fullname}"></span>
            <a href="/settings" class="text-blue-500 hover:underline">My Profile</a>
            <a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
@@ -30,8 +30,8 @@
 
     <!-- Page Content -->    
     <section class="p-6">
-        <h1 class="text-3xl font-bold">Create Meal Plan, <span th:text="${username}"></span></h1>
-        <p class="text-gray-600 mt-2">Customize and generate your meal plan.</p>
+        <h1 class="text-3xl font-bold">Create Meal Plan </h1>
+        <p class="text-gray-600 mt-2">Customize and generate your meal plan. You can view your saved meal plans in the dashboard or in the 'My Plans' page.</p>
         
         <!-- User Info -->
         <section class="p-6 mt-6 bg-white shadow rounded-md">
@@ -61,8 +61,10 @@
 		
 		<!-- Meal Plan Form START-->
 		<div class="flex justify-center items-center mt-4">
-			<form th:action="@{/createplan/save-mealplan}" th:object="${userInfo}" method="post">
-			
+			<form id="mealPlanForm" th:action="@{/createplan/save-mealplan}" th:object="${userInfo}" method="post">
+				<!-- Pass values of userInfo back to controller when saving -->
+				<input type="hidden" th:field="*{id}" th:value="${userInfo.id}"/>
+				<input type="hidden" th:field="*{dietPreference}" th:value="${userInfo.dietPreference}"/>
 				<!-- Checkboxes for the days of week -->
 				<div class="flex justify-center items-center mt-2 mb-4">
 					<label><strong>Meal Plan Day Preference:</strong></label>
@@ -90,16 +92,33 @@
 					</button>
 			
 					<!-- Save Meal Plan button -->
-					<button type="submit" class="rounded-md mb-4 bg-green-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700 hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" >
+					<button disabled type="submit" id="saveMealPlanButton" class="rounded-md mb-4 bg-green-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700 hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" >
 					  Save Meal Plan
 					</button>
 				</div>
 			</form> <!-- Meal Plan Form END -->
 		</div>
+		
+		<!-- Success Modal (hidden initially) -->
+		<div id="successModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center hidden">
+  			<div class="bg-white p-6 rounded-lg shadow-lg w-1/2 max-w-lg text-center">
+		    <h3 class="text-xl text-green-600 font-bold">Success!</h3>
+		    <p class="mt-4 text-gray-700">
+		    	Your meal plan has been saved successfully. Navigate to the dashboard or 'My Plans' page to view your saved meal plans.
+		    </p>
+		    <button id="closeModalButton" class="mt-4 bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700">
+		      Close
+		    </button>
+		    
+		    <button id="viewMyPlansButton" class="mt-4 bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700">
+		      View My Plans
+		    </button>
+		  </div>
+		</div>
     </section>
 </body>
 
-	<script>
+	<script th:inline="javascript">
 			document.body.addEventListener('htmx:configRequest', (evt) => {
 				  evt.detail.headers['accept'] = 'text/html-partial';
 				  if (evt.detail.verb !== 'get') {
@@ -110,6 +129,47 @@
 				    }
 				  }
 				});
+			
+			// Function to show success modal
+			  function showSuccessModal() {
+			    const successModal = document.getElementById('successModal');
+			    successModal.classList.remove('hidden');  // Make the modal visible
+			  }
+			
+			// Handle form submission and show the modal on success
+			  document.getElementById('mealPlanForm').addEventListener('submit', function(event) {
+			    event.preventDefault(); // Prevent the default form submission
+
+			    // Simulate an API call or successful form submission
+			    fetch(this.action, {
+			      method: this.method,
+			      body: new FormData(this),
+			    })
+			    .then(response => {
+			      if (response.ok) {
+			        // Show the success message if the response is successful
+			        showSuccessModal();
+			      } else {
+			        // Handle errors here, if needed
+			        console.error('Failed to save meal plan');
+			      }
+			    })
+			    .catch(error => {
+			      console.error('Error:', error);
+			    });
+			  });
+			
+			// Close the modal when the close button is clicked
+			  document.getElementById('closeModalButton').addEventListener('click', function() {
+			    document.getElementById('successModal').classList.add('hidden');
+			    window.location.href = '/createplan';
+			  });
+			
+			// Navigate to My Plans page
+			  document.getElementById('viewMyPlansButton').addEventListener('click', function() {
+			    document.getElementById('successModal').classList.add('hidden');
+			    window.location.href = '/myplans';
+			  });
 			
 			// JavaScript function to toggle all checkboxes
 		    function toggleCheckboxes(selectAllCheckbox) {
@@ -130,10 +190,64 @@
 
 		        document.getElementById('selectAll').checked = allChecked;
 		    }
-
+			
+		 	// Function to check if at least one checkbox is selected
+		    function isAnyDaySelected() {
+		      const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedDays"]');
+		      return Array.from(checkboxes).some(checkbox => checkbox.checked);
+		    }
+			
+			// Function to check if the meals table has rows
+		    function isMealsTableNotEmpty() {
+		      const mealsTable = document.getElementById('meals');
+		      return mealsTable && mealsTable.rows.length > 3;
+		    }
+			
+		 	// Function to enable or disable the Save Meal Plan button
+		    function toggleSaveButton() {
+		      const saveButton = document.getElementById('saveMealPlanButton');
+			
+		      if (isMealsTableNotEmpty() && isAnyDaySelected()) {
+		        saveButton.disabled = false; // Enable the button
+		      } else {
+		        saveButton.disabled = true; // Disable the button
+		      }
+		    }
+		 	
 		    // Add event listeners to each checkbox to update "Select All" state
 		    document.querySelectorAll('input[type="checkbox"]:not(#selectAll)').forEach(function(checkbox) {
 		        checkbox.addEventListener('change', updateSelectAllState);
+		    });
+		    
+			
+		 	// Attach event listeners
+		    document.addEventListener('DOMContentLoaded', function () {
+		    	// Check the initial conditions when the page loads
+		    	toggleSaveButton();
+		      
+		    	// Listen for changes in the meal plan table (e.g., when meals are added)
+		      document.getElementById('meals').addEventListener('htmx:afterSwap', function() {
+		        toggleSaveButton();  // Re-check when meals are updated
+		      });
+		    
+		   // Listen for changes in the checkboxes for the days of the week
+		      const dayCheckboxes = document.querySelectorAll('input[type="checkbox"][name="selectedDays"]');
+		      dayCheckboxes.forEach(checkbox => {
+		        checkbox.addEventListener('change', function() {
+		          toggleSaveButton(); // Re-check the button state
+		        });
+		      });
+		      
+		   		// Listen for changes in the Select All checkbox to update all the day checkboxes
+		      document.getElementById('selectAll').addEventListener('change', function() {
+		        const isChecked = this.checked;
+		        dayCheckboxes.forEach(checkbox => {
+		          checkbox.checked = isChecked;
+		        });
+		        toggleSaveButton(); // Re-check the button state
+		      });
+
+		      
 		    });
 	</script>
 	

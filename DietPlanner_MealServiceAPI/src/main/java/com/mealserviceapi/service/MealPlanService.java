@@ -94,37 +94,38 @@ public class MealPlanService {
 				    {
 				        break;
 				    }
-				    else if (dietPreference.equals("LOW CARB"))
-				    {
-				        //Check if carb is met (total calories from carbs should be within 15% of caloric intake goal)
-				        int carbCalories = currentCarb * 4;
-				        if (carbCalories <= (caloricIntakeGoal * .15))
-				        {
-				            break;
-				        }
-				    }
-				    else if (dietPreference.equals("KETO"))
-				    {
-				        //Check if fat is met (total calories from fat should be within 70% of caloric intake goal)
-				        int fatCalories = currentFat * 9;
-				        if (fatCalories <= (caloricIntakeGoal * .7))
-				        {
-				            break;
-				        }
-				    }
-				    //If diet preference is 'Any'
-				    else
-				    {
-				        break;
-				    }
-				    //If condition is not met, loop again
-				    mealList.clear();
-				    remainingCalories = caloricIntakeGoal;
-				    currentCalories = 0;
-				    currentCarb = 0;
-				    currentFat = 0;
-				    currentProtein = 0;
 				}
+			    else if (dietPreference.equals("LOW CARB"))
+			    {
+			        //Check if carb is met (total calories from carbs should be within 15% of caloric intake goal)
+			        int carbCalories = currentCarb * 4;
+			        if (carbCalories <= (caloricIntakeGoal * .15))
+			        {
+			            break;
+			        }
+			    }
+			    else if (dietPreference.equals("KETO"))
+			    {
+			        //Check if fat is met (total calories from fat should be within 70% of caloric intake goal)
+			        int fatCalories = currentFat * 9;
+			        if (fatCalories <= (caloricIntakeGoal * .7))
+			        {
+			            break;
+			        }
+			    }
+				//If diet preference is 'Any'
+			    else
+			    {
+			        break;
+			    }
+			    //If condition is not met, loop again
+			    mealList.clear();
+			    remainingCalories = caloricIntakeGoal;
+			    currentCalories = 0;
+			    currentCarb = 0;
+			    currentFat = 0;
+			    currentProtein = 0;
+				
 			}
 			
 		}
@@ -134,9 +135,7 @@ public class MealPlanService {
 	
 	//Save meal plan function
 	public void saveMealPlan(UserInfo userInfo) {
-		//From form: list of meals, selected days
-		//From user: id
-		
+
 		//Get user id
 		Long accountId = userInfo.getId();
 		

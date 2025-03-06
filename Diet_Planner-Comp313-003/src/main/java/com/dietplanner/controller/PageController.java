@@ -103,7 +103,7 @@ public class PageController {
 
             // Pass values to model
             model.addAttribute("user", appUser);
-            model.addAttribute("username", appUser.getUsername());
+            model.addAttribute("fullname", appUser.getFullname());
             model.addAttribute("caloricIntakeGoal", caloricIntakeGoal);
             model.addAttribute("dietPreference", dietPreference);
             model.addAttribute("helpText", helpText);
