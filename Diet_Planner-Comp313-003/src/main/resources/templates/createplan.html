@@ -62,7 +62,9 @@
 		<!-- Meal Plan Form START-->
 		<div class="flex justify-center items-center mt-4">
 			<form th:action="@{/createplan/save-mealplan}" th:object="${userInfo}" method="post">
-			
+				<!-- Pass values of userInfo back to controller when saving -->
+				<input type="hidden" th:field="*{id}" th:value="${userInfo.id}"/>
+				<input type="hidden" th:field="*{dietPreference}" th:value="${userInfo.dietPreference}"/>
 				<!-- Checkboxes for the days of week -->
 				<div class="flex justify-center items-center mt-2 mb-4">
 					<label><strong>Meal Plan Day Preference:</strong></label>

@@ -48,23 +48,17 @@ public class UserInfo {
 	public void setSelectedDays(List<String> selectedDays) {
 		this.selectedDays = selectedDays;
 	}
-	public List<String> getMealIds() {
-		return mealIds;
-	}
-	public void setMealIds(List<String> mealIds) {
-		this.mealIds = mealIds;
-	}
+
 	public UserInfo() {}
 	
 	public UserInfo(Long id, String dietPreference, Double weight, Integer caloricIntakeGoal, 
-			List<Meal> mealPlan, List<String> selectedDays, List<String> mealIds) {
+			List<Meal> mealPlan, List<String> selectedDays) {
 		this.id = id;
 		this.dietPreference = dietPreference;
 		this.weight = weight;
 		this.caloricIntakeGoal = caloricIntakeGoal;
 		this.mealPlan = mealPlan;
 		this.selectedDays = selectedDays;
-		this.mealIds = mealIds;
 	}
 	
 	

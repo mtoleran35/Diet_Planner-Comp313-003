@@ -14,6 +14,5 @@ public class UserInfo {
 	private Integer caloricIntakeGoal;
 	private List<Meal> mealPlan;
 	private List<String> selectedDays;
-	private List<String> mealIds; //Needed to pass list of meals from view to controller
 	
 }

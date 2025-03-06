@@ -134,9 +134,7 @@ public class MealPlanService {
 	
 	//Save meal plan function
 	public void saveMealPlan(UserInfo userInfo) {
-		//From form: list of meals, selected days
-		//From user: id
-		
+
 		//Get user id
 		Long accountId = userInfo.getId();
 		

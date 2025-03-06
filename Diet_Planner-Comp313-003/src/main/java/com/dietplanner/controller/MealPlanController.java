@@ -23,17 +23,14 @@ import com.dietplanner.service.UserService;
 public class MealPlanController {
 	private final MealPlanApiService mealPlanApiService;
 	
-	private final MealApiService mealApiService;
-	
 	@Autowired
     private UserService userService;
 	
-	//Workaround
+	//Updated list of meals
 	private List<Meal> updatedMealList;
 	
-	public MealPlanController(MealPlanApiService mealPlanApiService, MealApiService mealApiService) {
+	public MealPlanController(MealPlanApiService mealPlanApiService) {
 		this.mealPlanApiService = mealPlanApiService;
-		this.mealApiService = mealApiService;
 	}
 	
 	@PostMapping("/generate-mealplan")
@@ -44,6 +41,7 @@ public class MealPlanController {
             
             //Create userInfo dto to store needed user info for generating a meal plan
             UserInfo userInfo = new UserInfo();
+            
             userInfo.setId(appUser.getId());
             userInfo.setDietPreference(appUser.getDietPreference());
             userInfo.setWeight(appUser.getWeight());
@@ -52,7 +50,7 @@ public class MealPlanController {
             //Get list of meals
             List<Meal> meals = mealPlanApiService.generateMealPlan(userInfo);
             
-            //Workaround
+            //Update list of meals
             updatedMealList = meals;
             
             //Get total values of macros
@@ -80,10 +78,6 @@ public class MealPlanController {
 	public String saveMealPlanForm(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute UserInfo userInfo) {
 		//Convert the list of meals in userInfo from String to Meal
 		UserInfo updatedUserInfo = userInfo;
-		
-		//SYSLOG
-		//System.out.println("---SIZE--- " + userInfo.getSelectedDays().size());
-		System.out.println("---SIZE--- " + updatedMealList.size()); //Workaround
 		
 		updatedUserInfo.setMealPlan(updatedMealList);
 		
