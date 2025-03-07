@@ -20,42 +20,10 @@ public class MealPlan {
     private Integer mealQuantity;
     private String assignedDay;
     
-    private int totalCalories;
-    private int totalCarbohydrate;
-    private int totalProtein;
-    private int totalFat;
-
-    
-    public int getTotalCalories() {
-        return totalCalories;
-    }
-
-    public int getTotalCarbohydrate() {
-        return totalCarbohydrate;
-    }
-
-    public int getTotalProtein() {
-        return totalProtein;
-    }
-
-    public int getTotalFat() {
-        return totalFat;
-    }
-    
-    public void setTotalCalories(Integer totalCalories) {
-        this.calories = totalCalories;
-    }
-
-    public void setTotalCarbohydrate(Integer totalCarbohydrate) {
-        this.carbohydrate = totalCarbohydrate;
-    }
-
-    public void setTotalProtein(Integer totalProtein) {
-        this.protein = totalProtein;
-    }
-
-    public void setTotalFat(Integer totalFat) {
-        this.fat = totalFat;
-    }
+    // New fields for daily totals
+    private Integer totalCalories = 0;
+    private Integer totalCarbohydrate = 0;
+    private Integer totalProtein = 0;
+    private Integer totalFat = 0;
     
 }
