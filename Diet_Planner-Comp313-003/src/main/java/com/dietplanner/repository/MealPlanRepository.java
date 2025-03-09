@@ -3,11 +3,14 @@ package com.dietplanner.repository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
+
 import com.dietplanner.model.MealPlan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.StoredProcedureQuery;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class MealPlanRepository {
@@ -42,5 +45,22 @@ public class MealPlanRepository {
         }
 
         return mealPlans;
-    }	
+    }
+
+    @Transactional
+    public void deleteMealPlansByDay(Long userId, String assignedDay) {
+        String sql = "DELETE FROM meal_plan_detail mpd WHERE mpd.assignedday = :assignedDay AND mpd.mealplanid IN (SELECT mp.mealplanid FROM meal_plan mp WHERE mp.accountid = :userId)";
+        
+        try {
+            Query query = entityManager.createNativeQuery(sql);
+            query.setParameter("assignedDay", assignedDay);
+            query.setParameter("userId", userId);
+            int rowsDeleted = query.executeUpdate();
+
+            System.out.println(rowsDeleted + " records deleted.");
+        } catch (Exception e) {
+            // Handle exception (e.g., log it)
+            System.err.println("Error while deleting records: " + e.getMessage());
+        }
+    }    
 }

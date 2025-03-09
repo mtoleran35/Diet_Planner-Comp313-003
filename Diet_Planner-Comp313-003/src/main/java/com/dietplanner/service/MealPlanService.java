@@ -40,5 +40,11 @@ public class MealPlanService {
 
         return dailyTotals;
     }
+
+    @Transactional
+    public void deleteDailyTotal(Long userId, String assignedDay) {
+        // Delete meal plans related to the assigned day for the user.
+        mealPlanRepository.deleteMealPlansByDay(userId, assignedDay);
+    }    
     
 }
