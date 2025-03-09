@@ -95,9 +95,9 @@
                         <div class="flex justify-between items-center">
                             <h3 class="text-xl font-bold mb-2">Daily Totals</h3>
                             <!-- Trash Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="deleteDailyTotal('${dailyTotal.key}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" th:attr="onclick=|deleteDailyTotal('${dailyTotal.key}')|">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
+                            </svg>                            
                         </div>
                         <div class="flex justify-between items-center">
                             <p><strong>Total Calories (kcal):</strong></p>
@@ -124,7 +124,7 @@
             </div>
         </div>
     </section>
-
+	<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <script>
         function toggleDetails(button) {
             const details = button.nextElementSibling;
@@ -134,13 +134,31 @@
             indicator.textContent = details.classList.contains("hidden") ? "+" : "−";
         }
 
+        const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
         function deleteDailyTotal(day) {
             if (confirm(`Are you sure you want to delete all meals for ${day}?`)) {
-                // Add your delete logic here
-                console.log(`Deleting meals for ${day}`);
-                // You can make an AJAX call or form submission to delete the meals for the day
+                fetch('/delete-meal?assignedDay=' + encodeURIComponent(day), {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken // Adding the CSRF token to the headers
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Daily total meal deleted successfully!');
+                        // Optionally remove the corresponding day's meals from the display
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert('Failed to delete meals for the day.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
-        }
+        }        
+        
     </script>
 </body>
 
