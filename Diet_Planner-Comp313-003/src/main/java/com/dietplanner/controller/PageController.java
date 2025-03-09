@@ -123,7 +123,7 @@ public class PageController {
         }
         return "createplan"; // Renders create-plan.html
     }
-          
+
     @DeleteMapping("/delete-meal")
     @ResponseBody
     public ResponseEntity<String> deleteMeal(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String assignedDay) {

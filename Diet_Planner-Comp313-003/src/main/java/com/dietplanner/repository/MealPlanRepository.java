@@ -46,7 +46,7 @@ public class MealPlanRepository {
 
         return mealPlans;
     }
-               
+
     @Transactional
     public void deleteMealPlansByDay(Long userId, String assignedDay) {
         String sql = "DELETE FROM meal_plan_detail mpd WHERE mpd.assignedday = :assignedDay AND mpd.mealplanid IN (SELECT mp.mealplanid FROM meal_plan mp WHERE mp.accountid = :userId)";
