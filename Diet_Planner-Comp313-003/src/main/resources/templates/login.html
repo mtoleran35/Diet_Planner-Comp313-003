@@ -1,90 +1,130 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .bg-image {
-            background-image: url('/img/imagewelcomee.png');
-            background-size: cover;
-            background-position: center;
-            position: absolute;
-            inset: 0; 
-            z-index: -1; 
-        }
-        .form-container {
-            position: relative;
-            z-index: 10; 
-            background-color: rgba(255, 255, 255, 0.9); 
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 24px;
-            margin-top: 30px;
-        }
-        nav {
-            position: relative;
-            z-index: 20;
-        }
-    </style>    
+<title>Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.bg-image {
+	background-image: url('/img/imageimage.png');
+	background-size: cover;
+	background-position: center;
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+}
+.bg-image::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+.form-container {
+	position: relative;
+	z-index: 10;
+	background-color: rgba(255, 255, 255, 0.9);
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	padding: 32px;
+	margin-top: 30px;
+	max-width: 500px;
+}
+
+nav {
+	position: relative;
+	z-index: 20;
+}
+
+.content {
+	flex: 1; 
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+footer {
+	background-color: #2d2d2d;
+	color: white;
+	text-align: center;
+	padding: 10px;
+}
+</style>
 </head>
 <body class="bg-gray-100">
+	<!-- Navbar -->
+	<nav class="bg-gray-800 text-white shadow-lg py-3">
+		<div class="flex items-center px-4 mx-auto">
+			<a href="/" class="text-lg font-bold flex items-center"> <img
+				src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+			</a>
+		</div>
+	</nav>
+	<!-- Background Image -->
+	<div class="bg-image"></div>
 
-    <!-- Navbar -->
-    <nav class="bg-gray-800 text-white shadow-lg py-3">
-        <div class="container mx-auto flex items-center px-6">
-            <a href="/" class="text-lg font-bold flex items-center">
-                <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
-            </a>
-        </div>
-    </nav>
+	<!-- Main Container -->
+	<div class="content">
+		<!-- Form Container -->
+		<div class="form-container w-full max-w-md">
+			<h2 class="text-2xl font-bold text-center mb-6">Login to Your
+				Account</h2>
 
-    <!-- Background Image -->
-    <div class="bg-image"></div>
+			<!-- Display Error Message -->
+			<div th:if="${errorMessage}" class="text-red-500 text-sm mb-4">
+				<p th:text="${errorMessage}"></p>
+			</div>
 
-    <!-- Main Container -->
-    <div class="min-h-screen flex items-center justify-center">
-        <!-- Form Container -->
-        <div class="form-container w-full max-w-md">
-            <h2 class="text-2xl font-bold text-center mb-6">Login to Your Account</h2>
+			<!-- Login Form -->
+			<form action="/login" method="post">
+				<input type="hidden" th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}" />
+				<!-- Username -->
+				<div class="mb-4">
+					<label for="username"
+						class="block text-sm font-medium text-gray-700">Username</label> <input
+						type="text" name="username" id="username"
+						class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+						required>
+				</div>
+				<!-- Password -->
+				<div class="mb-4">
+					<label for="password"
+						class="block text-sm font-medium text-gray-700">Password</label> <input
+						type="password" name="password" id="password"
+						class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+						required>
+				</div>
 
-            <!-- Display Error Message -->
-            <div th:if="${errorMessage}" class="text-red-500 text-sm mb-4">
-                <p th:text="${errorMessage}"></p>
-            </div>
-            
-            <!-- Login Form -->
-            <form action="/login" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <!-- Username -->
-                <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" name="username" id="username" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
+				<!-- Submit Button -->
+				<button type="submit"
+					class="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Login</button>
+			</form>
 
-                <!-- Password -->
-                <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" id="password" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
+			<!-- Register Link -->
+			<p class="mt-4 text-center text-sm text-gray-600">
+				Don't have an account? <a href="/register"
+					class="text-blue-500 hover:underline">Register here</a>
+			</p>
+		</div>
+	</div>
 
-                <!-- Submit Button -->
-                <button type="submit" class="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Login</button>
-            </form>
-
-            <!-- Register Link -->
-            <p class="mt-4 text-center text-sm text-gray-600">
-                Don't have an account? <a href="/register" class="text-blue-500 hover:underline">Register here</a>
-            </p>
-        </div>
-    </div>
-    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
-        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
-            <p>&copy; 2025 Diet Planner |</p>
-            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
-            <span class="text-gray-400">|</span>
-            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
-        </div>
-    </footer>
-    
+	<footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+		<div
+			class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+			<p>&copy; 2025 Diet Planner |</p>
+			<a href="/privacy" class="text-gray-300 hover:text-white">Privacy
+				Policy</a> <span class="text-gray-400">|</span> <a href="/contact"
+				class="text-gray-300 hover:text-white">Contact</a>
+		</div>
+	</footer>
 </body>
 </html>

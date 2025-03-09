@@ -98,13 +98,30 @@
             }
         }
 
-        /* Background Image */
+       /* Background Image */
         body {
-            background-image: url('../img/imagewelcomee.png');
+            background-image: url('/img/imageimage.png');
             background-size: cover;
+            background-position: center center;
             background-repeat: no-repeat;
             background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-y: auto;
         }
+
+        /* Dark semi-transparent overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
     </style>
 </head>
 <body class="text-gray-900">
@@ -121,16 +138,20 @@
     </script>
 
     <!-- Navbar -->
-    <nav class="flex justify-between items-center p-4 shadow bg-white">
-        <a href="/dashboard" class="text-lg font-bold flex items-center">
-            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Dashboard
-        </a>
-        <div class="flex items-center space-x-4">
-            <span class="font-semibold" th:text="${user.firstName + ' ' + user.lastName}"></span>
-            <a href="/settings" class="text-blue-500 hover:underline">My Profile</a>
-            <a href="/myplans" class="text-blue-500 hover:underline">My Plans</a>
-            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
-            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+    <nav class="bg-gray-800 text-white shadow-lg py-3">
+        <div class="flex justify-between items-center px-4 mx-auto">
+            <!-- Home on the left -->
+            <a href="/" class="text-lg font-bold flex items-center">
+                <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+            </a>
+            
+            <div class="flex items-center space-x-4">
+            <span class="font-semibold text-white" th:text="${user.firstName + ' ' + user.lastName}"></span>
+            <a href="/settings" class="text-white font-bold hover:underline">My Profile</a>
+            <a href="/myplans" class="text-white font-bold hover:underline">My Plans</a>
+            <a href="/createplan" class="text-white font-bold hover:underline">Create Plan</a>
+            <a href="/logout" class="text-red-500 font-boldhover:underline">Logout</a>
+            </div>
         </div>
     </nav>
 
@@ -202,5 +223,15 @@
             </div>
         </form>
     </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+            <p>&copy; 2025 Diet Planner |</p>
+            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
+            <span class="text-gray-400">|</span>
+            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
+        </div>
+    </footer>
 </body>
 </html>
