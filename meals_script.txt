@@ -1,0 +1,85 @@
+use DietplannerDB;
+INSERT INTO meal (MealName, Calories, Carbohydrate, Fat, Protein, Status)
+VALUES
+('Chicken Breast and Rice', 480, 50, 6, 50, 'Active'),
+('Salmon with Sweet Potato and Asparagus', 510, 40, 22, 45, 'Active'),
+('Turkey Stir Fry with Brown Rice', 400, 35, 10, 45, 'Active'),
+('Beef and Black Bean Chili', 450, 30, 20, 40, 'Active'),
+('Tuna Salad with Avocado and Mixed Greens', 400, 15, 20, 40, 'Active'),
+('Egg White Veggie Scramble with Toast', 400, 30, 10, 35, 'Active'),
+('Chicken Caesar Salad', 400, 10, 18, 40, 'Active'),
+('Chicken and Veggie Fajita Bowl', 450, 40, 12, 50, 'Active'),
+('Shrimp Stir Fry with Cauliflower Rice', 400, 20, 14, 40, 'Active'),
+('Lentil & Chicken Soup', 350, 30, 8, 40, 'Active'),
+('Beef & Spinach Meatballs with Zucchini Noodles', 400, 15, 22, 40, 'Active'),
+('Egg and Avocado Breakfast Burrito', 350, 30, 16, 30, 'Active'),
+('Cottage Cheese & Berry Parfait', 300, 25, 10, 30, 'Active'),
+('Grilled Turkey Burger with Sweet Potato Fries', 450, 40, 18, 40, 'Active'),
+('Tofu Stir Fry with Veggies', 400, 30, 22, 30, 'Active'),
+('Pork Tenderloin with Roasted Brussels Sprouts', 420, 20, 22, 40, 'Active'),
+('Baked Cod with Quinoa and Green Beans', 400, 35, 10, 45, 'Active'),
+('Grilled Chicken with Hummus & Cucumber Salad', 380, 15, 16, 50, 'Active'),
+('Salmon with Avocado & Tomato Salad', 500, 20, 28, 45, 'Active'),
+('Chicken and Chickpea Curry', 420, 30, 22, 40, 'Active'),
+('Pork Tenderloin & Sweet Potato', 450, 30, 18, 42, 'Active'),
+('Beef & Rice Bowl', 450, 40, 18, 40, 'Active'),
+('Beef Stir-Fry with Rice', 450, 40, 15, 40, 'Active'),
+('Pork Fried Rice', 500, 50, 20, 38, 'Active'),
+('Pork and Rice Casserole', 480, 38, 20, 42, 'Active'),
+('Beef Teriyaki with Rice', 430, 35, 16, 40, 'Active'),
+('Pork & Pineapple Fried Rice', 480, 50, 18, 40, 'Active'),
+('Beef and Rice Stuffed Peppers', 400, 35, 15, 38, 'Active'),
+('Pork Chop with Rice & Veggies', 450, 40, 18, 42, 'Active'),
+('Beef Biryani with Rice', 500, 45, 20, 42, 'Active');
+
+use DietplannerDB;
+INSERT INTO meal (MealName, Calories, Carbohydrate, Fat, Protein, Status)
+VALUES
+('Grilled Chicken with Avocado & Spinach Salad', 380, 10, 22, 45, 'Active'),
+('Zucchini Noodles with Pesto and Shrimp', 350, 10, 22, 30, 'Active'),
+('Eggplant Lasagna', 400, 12, 22, 30, 'Active'),
+('Grilled Salmon with Cauliflower Rice', 450, 8, 25, 40, 'Active'),
+('Bacon-Wrapped Asparagus with Grilled Chicken', 380, 6, 20, 45, 'Active'),
+('Cobb Salad with Blue Cheese Dressing', 500, 8, 35, 40, 'Active'),
+('Beef and Broccoli Stir Fry (No Rice)', 350, 10, 20, 40, 'Active'),
+('Cauliflower Crust Pizza with Pepperoni', 450, 12, 28, 28, 'Active'),
+('Chicken Caesar Salad (No Croutons)', 400, 5, 22, 45, 'Active'),
+('Egg and Cheese Breakfast Muffins (Low-Carb)', 300, 3, 22, 20, 'Active'),
+('Turkey Lettuce Wraps with Guacamole', 350, 6, 20, 30, 'Active'),
+('Grilled Shrimp with Garlic Butter & Asparagus', 350, 6, 22, 35, 'Active'),
+('Pork Chops with Roasted Brussels Sprouts', 450, 12, 25, 40, 'Active'),
+('Tuna Salad with Mixed Greens', 350, 5, 20, 40, 'Active'),
+('Chicken Stir Fry with Bell Peppers', 400, 10, 20, 40, 'Active'),
+('Baked Salmon with Lemon & Dill', 400, 4, 22, 40, 'Active'),
+('Chicken Fajitas (No Tortilla)', 380, 8, 16, 45, 'Active'),
+('Steak with Garlic Mushrooms', 500, 7, 35, 45, 'Active'),
+('Cabbage Stir Fry with Ground Turkey', 350, 10, 20, 30, 'Active'),
+('Grilled Chicken with Roasted Cauliflower', 400, 10, 20, 45, 'Active');
+
+use DietplannerDB;
+INSERT INTO meal (MealName, Calories, Carbohydrate, Fat, Protein, Status)
+VALUES
+('Chicken Alfredo with Shirataki Noodles', 500, 6, 35, 45, 'Active'),
+('Beef Taco Bowl (No Shell)', 500, 8, 35, 35, 'Active'),
+('Broccoli and Cheese Soup', 350, 8, 30, 15, 'Active'),
+('Cheeseburger Casserole', 600, 6, 50, 40, 'Active'),
+('Meatloaf with Cauliflower Mash', 500, 8, 35, 40, 'Active'),
+('Chicken Enchilada Bowl (No Tortilla)', 500, 7, 35, 40, 'Active'),
+('Shrimp and Crab Cakes', 500, 6, 30, 35, 'Active'),
+('Eggplant and Sausage Casserole', 500, 10, 35, 30, 'Active'),
+('Beef Wellington', 600, 8, 45, 45, 'Active'),
+('Grilled Salmon with Creamy Spinach', 450, 7, 30, 35, 'Active'),
+('Avocado Chicken Salad', 400, 6, 30, 35, 'Active'),
+('Pork Tenderloin with Garlic Cream Sauce', 500, 6, 35, 40, 'Active'),
+('Lamb Chops with Mint Yogurt Sauce', 600, 6, 45, 45, 'Active'),
+('Zucchini Noodles with Pesto', 400, 6, 30, 35, 'Active'),
+('Chicken and Mushroom Skillet', 500, 7, 35, 40, 'Active'),
+('Bacon-Wrapped Pork Tenderloin', 600, 5, 45, 45, 'Active'),
+('Shrimp Scampi with Zucchini Noodles', 450, 5, 35, 35, 'Active'),
+('Avocado Bacon Lettuce Wraps', 400, 5, 35, 20, 'Active'),
+('Baked Chicken Thighs with Creamy Spinach', 550, 6, 40, 40, 'Active'),
+('Steak with Garlic Butter and Asparagus', 650, 8, 45, 50, 'Active')
+
+
+
+
