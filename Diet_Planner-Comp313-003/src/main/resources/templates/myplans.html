@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <title>View Meal Plans</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Include Heroicons -->
     <script src="https://unpkg.com/@heroicons/react@1.0.5/dist/heroicons.js"></script>
 </head>
-
 <body class="bg-gray-100 text-gray-900">
     <!-- Navigation -->
     <nav class="flex justify-between items-center p-4 shadow bg-white">
@@ -22,12 +20,10 @@
             <a href="/logout" class="text-red-500 hover:underline">Logout</a>
         </div>
     </nav>
-
     <!-- Page Content -->
     <section class="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg mt-6">
         <div class="w-full h-40 bg-cover bg-center rounded-lg mb-6"
             style="background-image: url('/img/meal-banner.jpg');"></div>
-
         <!-- User Details -->
         <h1 class="text-3xl font-bold text-center">
             Welcome, <span th:text="${fullname}"></span>
@@ -41,11 +37,9 @@
         <p class="font-bold text-center text-gray-600">
             Weight: <span th:text="${weight}"></span> kg
         </p>
-
         <!-- Collapsible Meal Plans by Day -->
         <div th:if="${not #lists.isEmpty(mealPlans)}" class="mt-8">
             <h2 class="text-2xl font-bold text-center mt-8 mb-4">Your Daily Meals</h2>
-
             <!-- Sorting meals by day and displaying totals -->
             <div th:each="dailyTotal : ${dailyTotals}" class="mb-6">
                 <button class="w-full bg-blue-200 p-2 text-left font-bold flex justify-between items-center"
@@ -95,7 +89,7 @@
                         <div class="flex justify-between items-center">
                             <h3 class="text-xl font-bold mb-2">Daily Totals</h3>
                             <!-- Trash Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="deleteDailyTotal('${dailyTotal.key}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" th:attr="onclick=|deleteDailyTotal('${dailyTotal.key}')|">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </div>
@@ -124,23 +118,40 @@
             </div>
         </div>
     </section>
-
+	<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <script>
         function toggleDetails(button) {
             const details = button.nextElementSibling;
             details.classList.toggle("hidden");
-
             const indicator = button.querySelector(".indicator");
             indicator.textContent = details.classList.contains("hidden") ? "+" : "−";
         }
 
+        const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
         function deleteDailyTotal(day) {
             if (confirm(`Are you sure you want to delete all meals for ${day}?`)) {
-                // Add your delete logic here
-                console.log(`Deleting meals for ${day}`);
-                // You can make an AJAX call or form submission to delete the meals for the day
+                fetch('/delete-meal?assignedDay=' + encodeURIComponent(day), {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken // Adding the CSRF token to the headers
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Daily total meal deleted successfully!');
+                        // Optionally remove the corresponding day's meals from the display
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert('Failed to delete meals for the day.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
-        }
+        }        
+
     </script>
 </body>
 
