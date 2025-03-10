@@ -70,4 +70,19 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(existingUser); // Save updated user to the database
     }
+    
+    //Change password 
+    public void updatePassword(String username, String currentPassword, String newPassword) {
+        User user = findByUsername(username); // Fetch the user by username
+
+        // Verify current password
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        // Encode and update the new password
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user); // Save the updated user
+    }
+
  }
