@@ -6,16 +6,11 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dietplanner.dto.Meal;
 import com.dietplanner.dto.UserInfo;
@@ -123,16 +118,4 @@ public class PageController {
         }
         return "createplan"; // Renders create-plan.html
     }
-
-    @DeleteMapping("/delete-meal")
-    @ResponseBody
-    public ResponseEntity<String> deleteMeal(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String assignedDay) {
-        User user = userService.findByUsername(userDetails.getUsername());
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-        }
-
-        mealPlanService.deleteDailyTotal(user.getId(), assignedDay);
-        return ResponseEntity.ok("Daily total meal deleted successfully");
-    }        
 }

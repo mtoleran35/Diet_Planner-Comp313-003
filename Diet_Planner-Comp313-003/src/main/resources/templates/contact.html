@@ -5,13 +5,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-image: url('../img/image.contact.png'); 
+            background-image: url('../img/photo.png'); 
             background-size: cover; 
             background-position: center center; 
             background-repeat: no-repeat;
             background-attachment: fixed; 
             min-height: 100vh; 
             font-family: 'Arial', sans-serif;
+        }
+         body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
         }
 
        .form-container {

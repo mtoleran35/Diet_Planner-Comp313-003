@@ -6,25 +6,38 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Include Heroicons -->
     <script src="https://unpkg.com/@heroicons/react@1.0.5/dist/heroicons.js"></script>
+    <style>
+    footer {
+            background-color: #2d2d2d;
+            color: white;
+            position: fixed; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            text-align: center; 
+            padding: 0.75rem; 
+            z-index: 1000; 
+        }
+</style>
 </head>
-
 <body class="bg-gray-100 text-gray-900">
-    <!-- Navigation -->
-    <nav class="flex justify-between items-center p-4 shadow bg-white">
+   
+<!-- Navigation -->
+<nav class="bg-gray-800 text-white shadow-lg py-3">
+    <div class="flex justify-between items-center px-4 mx-auto">
         <a href="/dashboard" class="text-lg font-bold flex items-center">
-            <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2">
-            Dashboard
+            <img src="/img/home-icon.svg" alt="Dashboard" class="h-6 w-6 mr-2"> Dashboard
         </a>
         <div class="flex items-center space-x-4">
             <span class="font-semibold" th:text="${fullname}"></span>
-            <a href="/settings" class="text-blue-500 hover:underline">My Profile</a>
-            <a href="/createplan" class="text-blue-500 hover:underline">Create Plan</a>
-            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+            <a href="/settings" class="text-white font-bold hover:underline">My Profile</a>
+            <a href="/createplan" class="text-white font-bold hover:underline">Create Plan</a>
+            <a href="/logout" class="text-red-500 font-bold hover:underline">Logout</a>
         </div>
-    </nav>
-
+    </div>
+</nav>
     <!-- Page Content -->
-    <section class="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg mt-6">
+    <section class="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg mt-6 flex-grow">
         <div class="w-full h-40 bg-cover bg-center rounded-lg mb-6"
             style="background-image: url('/img/meal-banner.jpg');"></div>
 
@@ -123,7 +136,7 @@
                 </div>
             </div>
         </div>
-    </section>
+     </section>
 	<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <script>
         function toggleDetails(button) {
@@ -160,6 +173,15 @@
         }        
         
     </script>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+            <p>&copy; 2025 Diet Planner |</p>
+            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
+            <span class="text-gray-400">|</span>
+            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
+        </div>
+    </footer>
 </body>
 
 </html>
