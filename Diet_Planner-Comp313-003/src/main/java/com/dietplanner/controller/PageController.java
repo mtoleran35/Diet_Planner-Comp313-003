@@ -1,16 +1,20 @@
 package com.dietplanner.controller;
-
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dietplanner.dto.Meal;
 import com.dietplanner.dto.UserInfo;
@@ -21,13 +25,10 @@ import com.dietplanner.service.MealPlanService;
 
 @Controller
 public class PageController {
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private MealPlanService mealPlanService;
-
     // Display settings page with current user details
     @GetMapping("/settings")
     public String settingsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -38,23 +39,18 @@ public class PageController {
         }
         return "settings";  // Load settings page
     }
-
     @GetMapping("/myplans")
     public String showMyPlansPage(@AuthenticationPrincipal UserDetails user, Model model) {
         User appUser = userService.findByUsername(user.getUsername());
-
         // Fetch meal plans and daily totals
         Map<String, Object> mealPlansData = mealPlanService.getUserMealPlans(appUser.getId());
         List<MealPlan> mealPlans = (List<MealPlan>) mealPlansData.get("mealPlans");
         Map<String, MealPlan> dailyTotals = (Map<String, MealPlan>) mealPlansData.get("dailyTotals");
-
         // Use the fullname from the User entity
         String fullname = appUser.getFullname();
-
         // Debugging: Print mealPlans and dailyTotals in logs
         System.out.println("Meal Plans Retrieved: " + mealPlans);
         System.out.println("Daily Totals: " + dailyTotals);
-
         // Add attributes to the model
         model.addAttribute("username", appUser.getUsername());
         model.addAttribute("fullname", fullname); // Pass fullname to the template
@@ -63,17 +59,14 @@ public class PageController {
         model.addAttribute("weight", appUser.getWeight());
         model.addAttribute("mealPlans", mealPlans);
         model.addAttribute("dailyTotals", dailyTotals);
-
         return "myplans"; // Return the myplans.html view
     }
-
     @GetMapping("/createplan")
     public String createPlanPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         // Pass user info to model object, then display on page
         if (userDetails != null) {
             User appUser = userService.findByUsername(userDetails.getUsername());
             List<Meal> meals = new ArrayList<>();
-
             //Create userInfo dto to store needed user info for generating a meal plan
             UserInfo userInfo = new UserInfo();
             userInfo.setId(appUser.getId());
@@ -85,10 +78,8 @@ public class PageController {
             String dietPreference = appUser.getDietPreference();
             double weight = appUser.getWeight();
             int caloricIntakeGoal = appUser.getCaloricIntakeGoal();
-
             // Determine help text depending on diet preference
             String helpText = "";
-
             switch (dietPreference) {
                 case "HIGH PROTEIN":
                     helpText = "Total protein amount should be at least >= " + weight + "g";
@@ -100,7 +91,6 @@ public class PageController {
                     helpText = "Total calories from fat should not exceed " + (caloricIntakeGoal * .7) + " kcal (Within 70% of caloric intake goal) - Formula: Total Fat(g) * 9";
                     break;
             }
-
             // Pass values to model
             model.addAttribute("user", appUser);
             model.addAttribute("fullname", appUser.getFullname());
@@ -118,4 +108,16 @@ public class PageController {
         }
         return "createplan"; // Renders create-plan.html
     }
+
+    @DeleteMapping("/delete-meal")
+    @ResponseBody
+    public ResponseEntity<String> deleteMeal(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String assignedDay) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+
+        mealPlanService.deleteDailyTotal(user.getId(), assignedDay);
+        return ResponseEntity.ok("Daily total meal deleted successfully");
+    }        
 }
