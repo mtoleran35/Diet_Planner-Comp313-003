@@ -204,7 +204,7 @@ table:hover .table-overlay {
 
 				<!-- Weight -->
 				<div>
-					<label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
+					<label for="weight" class="block text-sm font-medium text-gray-700">Weight (lbs)</label>
 					<input type="number" name="weight" step="0.1" id="weight"
 						class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
 						required>
@@ -213,8 +213,8 @@ table:hover .table-overlay {
 				<!-- Caloric Intake Goal -->
 				<div>
 					<label for="caloricIntakeGoal"
-						class="block text-sm font-medium text-gray-700">Caloric
-						Intake Goal</label> <input type="number" name="caloricIntakeGoal"
+						class="block text-sm font-medium text-gray-700">Daily Caloric
+						Intake Goal (kcal)</label> <input type="number" name="caloricIntakeGoal"
 						id="caloricIntakeGoal"
 						class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
 						required>
@@ -226,13 +226,10 @@ table:hover .table-overlay {
 						class="block text-sm font-medium text-gray-700">Diet
 						Preference</label> <select name="dietPreference" id="dietPreference"
 						class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-						<option value="BALANCED">BALANCED</option>
-						<option value="DASH">DASH</option>
+						<option value="ANY">ANY</option>
 						<option value="HIGH PROTEIN">HIGH PROTEIN</option>
 						<option value="KETO">KETO</option>
 						<option value="LOW CARB">LOW CARB</option>
-						<option value="MEDITERRANEAN">MEDITERRANEAN</option>
-						<option value="VEGETARIAN">VEGETARIAN</option>
 					</select>
 				</div>
 
