@@ -3,21 +3,36 @@
 <head>
     <title>Add Meal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+     <style>
+    footer {
+            background-color: #2d2d2d;
+            color: white;
+            position: fixed; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            text-align: center; 
+            padding: 0.75rem; 
+            z-index: 1000; 
+        }
+</style>
+    
 </head>
 <body class="bg-gray-100 text-gray-900">
     <!-- Navbar -->
-    <nav class="flex justify-between items-center p-4 shadow bg-white">
+<nav class="bg-gray-800 text-white shadow-lg py-3 flex justify-between items-center px-4">
         <a href="/meals/admin-dashboard" class="text-lg font-bold flex items-center">
             <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Admin Dashboard
         </a>
         <div class="flex items-center space-x-4">
             <span class="font-semibold" th:text="${username}"></span>
-            <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+            <a href="/logout" class="text-red-500 font-bold hover:underline">Logout</a>
         </div>
     </nav>
 
     <!-- Add Meal Content -->
-    <div class="max-w-lg mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+       <div class="max-w-lg mx-auto mt-10 bg-white p-6 rounded-lg shadow-md mb-20">   
         <h2 class="text-2xl font-bold mb-4">Add New Meal</h2>
         <form action="/meals/add" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -40,5 +55,14 @@
             <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600">Add Meal</button>
         </form>
     </div>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+            <p>&copy; 2025 Diet Planner |</p>
+            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
+            <span class="text-gray-400">|</span>
+            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
+        </div>
+    </footer>
 </body>
 </html>
