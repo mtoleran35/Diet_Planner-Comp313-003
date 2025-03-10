@@ -225,13 +225,20 @@
             </div>
 
             <!-- Buttons -->
-            <div class="flex justify-between">
+
+            <div class="flex justify-between items-center">
+                        <!-- Change Password - added by Steph3/10/2025 -->
+			<a href="/change-password" class="text-blue-500 hover:underline">Change Password</a>
+			
+    		<div class="flex space-x-4">
+            <!-- <div class="flex justify-between"> -->
                 <button type="button" id="editBtn" class="py-3 px-6 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50" onclick="enableEditing()">Edit</button>
 
                 <button type="submit" id="updateBtn" class="hidden py-3 px-6 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Update User</button>
 
                 <a href="/dashboard" class="py-3 px-6 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">Cancel</a>
             </div>
+
         </form>
     </section>
     
