@@ -18,10 +18,14 @@ This project was developed on Windows. The following steps are provided to setup
 		○ (Steps with screenshots: https://www.wikihow.com/Install-Spring-Boot-in-Eclipse)
 	4. Install MySQL: https://www.w3schools.com/mysql/mysql_install_windows.asp
 	5. Install MySQL Workbench: https://dev.mysql.com/downloads/workbench/
-	6. Install MySQL Workbench: https://dev.mysql.com/downloads/workbench/
-	7. Install Lombok: https://projectlombok.org/download
-		○ Run the jar file and it will automatically detect the eclipse IDE in your machine
+	6. Install Lombok: https://projectlombok.org/download
+		○ Run the jar file and it will automatically detect the eclipse IDE in your machine. Click Install.
 		○ Steps with screenshots: https://www.baeldung.com/lombok-ide
+	7. Open your local instance in MySQL Workbench
+	8. Run the following scripts with the following file names (Located in this git repo):
+		○ dietplannerdb_script - To build the database schema of the app
+		○ meals_script - To populate the database with meal data
+		○ GetUserMealPlans_storedproc - Used for displaying saved meal plans
 
 Upon successful setup of the development environment, you should be able to run the application.
 
