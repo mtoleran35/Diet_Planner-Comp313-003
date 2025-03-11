@@ -108,16 +108,16 @@ public class PageController {
         }
         return "createplan"; // Renders create-plan.html
     }
-
+    
     @DeleteMapping("/delete-meal")
     @ResponseBody
-    public ResponseEntity<String> deleteMeal(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String assignedDay) {
+    public ResponseEntity<String> deleteMeal(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Integer planMealId) {
         User user = userService.findByUsername(userDetails.getUsername());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
 
-        mealPlanService.deleteDailyTotal(user.getId(), assignedDay);
+        mealPlanService.deleteDailyTotal(user.getId(), planMealId);
         return ResponseEntity.ok("Daily total meal deleted successfully");
     }        
 }

@@ -37,7 +37,8 @@ public class MealPlanRepository {
             mealPlan.setProtein((Integer) row[9]);
             mealPlan.setFat((Integer) row[10]);
             mealPlan.setMealQuantity((Integer) row[11]);
-            mealPlan.setAssignedDay((String) row[12]); // Adjust the index based on your SP result
+            mealPlan.setAssignedDay((String) row[12]);
+            mealPlan.setMealPlanId(((Number) row[13]).intValue()); // Adjust the index based on your SP result
             mealPlans.add(mealPlan);
         }
 
@@ -45,16 +46,26 @@ public class MealPlanRepository {
     }	
 
     @Transactional
-    public void deleteMealPlansByDay(Long userId, String assignedDay) {
-        String sql = "DELETE FROM meal_plan_detail mpd WHERE mpd.assignedday = :assignedDay AND mpd.mealplanid IN (SELECT mp.mealplanid FROM meal_plan mp WHERE mp.accountid = :userId)";
+    public void deleteMealPlansByDay(Long userId, Integer planMealId) {
+        // 1. Delete from meal_plan_detail where assignedDay matches and meal plan belongs to userId
+        String sql1 = "DELETE FROM meal_plan_detail mpd WHERE mpd.mealplanid = :planMealId";
+        
+        // 2. Delete from meal_plan where mealplan's userId matches
+        String sql2 = "DELETE FROM meal_plan mp WHERE mp.mealplanid = :planMealId";
 
         try {
-            Query query = entityManager.createNativeQuery(sql);
-            query.setParameter("assignedDay", assignedDay);
-            query.setParameter("userId", userId);
-            int rowsDeleted = query.executeUpdate();
+            // Execute first delete query
+            Query query1 = entityManager.createNativeQuery(sql1);
+            query1.setParameter("planMealId", planMealId);
+            int rowsDeleted1 = query1.executeUpdate();
+            System.out.println(rowsDeleted1 + " records deleted from meal_plan_detail.");
 
-            System.out.println(rowsDeleted + " records deleted.");
+            // Execute second delete query
+            Query query2 = entityManager.createNativeQuery(sql2);
+            query2.setParameter("planMealId", planMealId);
+            int rowsDeleted2 = query2.executeUpdate();
+            System.out.println(rowsDeleted2 + " records deleted from meal_plan.");
+
         } catch (Exception e) {
             // Handle exception (e.g., log it)
             System.err.println("Error while deleting records: " + e.getMessage());
