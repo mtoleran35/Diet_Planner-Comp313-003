@@ -13,17 +13,41 @@
 	        transform: scale(1.5); /* Increase the size by 1.5 times */
 	    }
 	    
-    footer {
-            background-color: #2d2d2d;
-            color: white;
-            position: fixed; 
-            left: 0; 
-            right: 0; 
-            bottom: 0; 
-            text-align: center; 
-            padding: 0.75rem; 
-            z-index: 1000; 
+	    body{
+	        background-image: url('/img/imageimage.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-y: auto;
+	    }
+	    
+	    /* Dark semi-transparent overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
         }
+	    
+	    footer {
+	            background-color: #2d2d2d;
+	            color: white;
+	            position: fixed; 
+	            left: 0; 
+	            right: 0; 
+	            bottom: 0; 
+	            text-align: center; 
+	            padding: 0.75rem; 
+	            z-index: 1000; 
+	    
+	    }
 	</style>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -31,7 +55,7 @@
 <nav class="bg-gray-800 text-white shadow-lg py-3">
     <div class="flex justify-between items-center px-4 mx-auto">
         <a href="/dashboard" class="text-lg font-bold flex items-center">
-            <img src="/img/home-icon.svg" alt="Dashboard" class="h-6 w-6 mr-2"> Dashboard
+            <img src="/img/home-icon.svg" alt="Dashboard" class="h-6 w-6 mr-2"> Home
         </a>
         <div class="flex items-center space-x-4">
             <span class="font-semibold" th:text="${fullname}"></span>
@@ -45,12 +69,12 @@
 
     <!-- Page Content -->    
     <section class="p-6">
-        <h1 class="text-3xl font-bold">Create Meal Plan </h1>
-        <p class="text-gray-600 mt-2">Customize and generate your meal plan. You can view your saved meal plans in the dashboard or in the 'My Plans' page.</p>
-        
-        <!-- User Info -->
-        <section class="p-6 mt-6 bg-white shadow rounded-md">
-			<div>
+    	<section class="p-6 mt-6 bg-white shadow rounded-md w-1/2 mx-auto">
+    		<h1 class="text-3xl font-bold">Create Meal Plan </h1>
+        	<p class="text-gray-600 mt-2">Customize and generate your meal plan. You can view your saved meal plans in 'Home' or in the 'My Plans' page.</p>
+    		
+    		<!-- User Info -->
+    		<div class="mt-4">
 				<p>
 					<strong>Daily Caloric Intake Goal:</strong> <span th:text="|${caloricIntakeGoal} kcal|"></span>
 				</p>
@@ -62,84 +86,86 @@
 				</p>
 
 			</div>
-		</section>
-		
-		<!-- Table label -->
-		<div class="flex justify-center items-center mt-4">
-			<h1 class="text-3xl mb-4 font-bold">Potential Meal Plan</h1>
-		</div>
-		
-		<!-- Table for list of meals -->
-		<div class="relative flex flex-col max-w-4xl mx-auto h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
-			<table id="meals" class="table-auto w-full" th:replace="~{fragments/meals :: meals (meals=${meals})}"></table>
-		</div>
-		
-		<!-- Meal Plan Form START-->
-		<div class="flex justify-center items-center mt-4">
-			<form id="mealPlanForm" th:action="@{/createplan/save-mealplan}" th:object="${userInfo}" method="post">
-				<!-- Pass values of userInfo back to controller when saving -->
-				<input type="hidden" th:field="*{id}" th:value="${userInfo.id}"/>
-				<input type="hidden" th:field="*{dietPreference}" th:value="${userInfo.dietPreference}"/>
-				<!-- Checkboxes for the days of week -->
-				<div class="flex justify-center items-center mt-2 mb-4">
-					<label><strong>Meal Plan Day Preference:</strong></label>
-				</div>
-				<div class="flex justify-center items-center mt-2 mb-4">
-					<!-- Select/Deselect All -->
-					<input class="mr-2 ml-2" type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)" /> Select All
-					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Monday" /> Monday
-					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Tuesday" /> Tuesday
-					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Wednesday" /> Wednesday
-					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Thursday" /> Thursday
-					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Friday" /> Friday
-					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Saturday" /> Saturday
-					<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Sunday" /> Sunday
-				</div>
-				
-				<!-- Buttons -->
-				<div class="flex justify-center items-center mt-2 mb-4">
-					<!-- Generate Meal Plan button -->
-					<button th:hx-post="@{/createplan/generate-mealplan}" 
-						th:hx-target="@{#meals}"
-						th:hx-swap="@{outerHTML}"
-						class="rounded-md mb-4 bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2">
-						Generate Meal Plan
-					</button>
+    	</section>
+        
+		<section class="p-6 mt-6 bg-white shadow rounded-md w-1/2 mx-auto">
+			<!-- Table label -->
+			<div class="flex justify-center items-center mt-4">
+				<h1 class="text-3xl mb-4 font-bold">Potential Meal Plan</h1>
+			</div>
 			
-					<!-- Save Meal Plan button -->
-					<button disabled type="submit" id="saveMealPlanButton" class="rounded-md mb-4 bg-green-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700 hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" >
-					  Save Meal Plan
-					</button>
-				</div>
-			</form> <!-- Meal Plan Form END -->
-		</div>
-		
-		<!-- Success Modal (hidden initially) -->
-		<div id="successModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center hidden">
-  			<div class="bg-white p-6 rounded-lg shadow-lg w-1/2 max-w-lg text-center">
-		    <h3 class="text-xl text-green-600 font-bold">Success!</h3>
-		    <p class="mt-4 text-gray-700">
-		    	Your meal plan has been saved successfully. Navigate to the dashboard or 'My Plans' page to view your saved meal plans.
-		    </p>
-		    <button id="closeModalButton" class="mt-4 bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700">
-		      Close
-		    </button>
-		    
-		    <button id="viewMyPlansButton" class="mt-4 bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700">
-		      View My Plans
-		    </button>
-		  </div>
-		</div>
+			<!-- Table for list of meals -->
+			<div class="relative flex flex-col max-w-4xl mx-auto h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+				<table id="meals" class="table-auto w-full" th:replace="~{fragments/meals :: meals (meals=${meals})}"></table>
+			</div>
+			
+			<!-- Meal Plan Form START-->
+			<div class="flex justify-center items-center mt-4">
+				<form id="mealPlanForm" th:action="@{/createplan/save-mealplan}" th:object="${userInfo}" method="post">
+					<!-- Pass values of userInfo back to controller when saving -->
+					<input type="hidden" th:field="*{id}" th:value="${userInfo.id}"/>
+					<input type="hidden" th:field="*{dietPreference}" th:value="${userInfo.dietPreference}"/>
+					<!-- Checkboxes for the days of week -->
+					<div class="flex justify-center items-center mt-2 mb-4">
+						<label><strong>Meal Plan Day Preference:</strong></label>
+					</div>
+					<div class="flex justify-center items-center mt-2 mb-4">
+						<!-- Select/Deselect All -->
+						<input class="mr-2 ml-2" type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)" /> Select All
+						<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Monday" /> Monday
+						<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Tuesday" /> Tuesday
+						<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Wednesday" /> Wednesday
+						<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Thursday" /> Thursday
+						<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Friday" /> Friday
+						<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Saturday" /> Saturday
+						<input class="mr-2 ml-2" type="checkbox" th:field="*{selectedDays}" value="Sunday" /> Sunday
+					</div>
+					
+					<!-- Buttons -->
+					<div class="flex justify-center items-center mt-2 mb-4">
+						<!-- Generate Meal Plan button -->
+						<button th:hx-post="@{/createplan/generate-mealplan}" 
+							th:hx-target="@{#meals}"
+							th:hx-swap="@{outerHTML}"
+							class="rounded-md mb-4 bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2">
+							Generate Meal Plan
+						</button>
+				
+						<!-- Save Meal Plan button -->
+						<button disabled type="submit" id="saveMealPlanButton" class="rounded-md mb-4 bg-green-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-700 focus:shadow-none active:bg-green-700 hover:bg-green-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2" >
+						  Save Meal Plan
+						</button>
+					</div>
+				</form> <!-- Meal Plan Form END -->
+			</div>
+			
+			<!-- Success Modal (hidden initially) -->
+			<div id="successModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center hidden">
+	  			<div class="bg-white p-6 rounded-lg shadow-lg w-1/2 max-w-lg text-center">
+			    <h3 class="text-xl text-green-600 font-bold">Success!</h3>
+			    <p class="mt-4 text-gray-700">
+			    	Your meal plan has been saved successfully. Navigate to the dashboard or 'My Plans' page to view your saved meal plans.
+			    </p>
+			    <button id="closeModalButton" class="mt-4 bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700">
+			      Close
+			    </button>
+			    
+			    <button id="viewMyPlansButton" class="mt-4 bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700">
+			      View My Plans
+			    </button>
+			  </div>
+			</div>
+	    </section>
+	    <!-- Footer -->
+	    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+	        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+	            <p>&copy; 2025 Diet Planner |</p>
+	            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
+	            <span class="text-gray-400">|</span>
+	            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
+	        </div>
+	    </footer>
     </section>
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
-        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
-            <p>&copy; 2025 Diet Planner |</p>
-            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
-            <span class="text-gray-400">|</span>
-            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
-        </div>
-    </footer>
 </body>
 
 	<script th:inline="javascript">

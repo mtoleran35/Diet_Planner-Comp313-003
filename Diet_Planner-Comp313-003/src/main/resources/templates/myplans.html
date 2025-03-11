@@ -6,18 +6,42 @@
     <!-- Include Heroicons -->
     <script src="https://unpkg.com/@heroicons/react@1.0.5/dist/heroicons.js"></script>
     <style>
-    footer {
-            background-color: #2d2d2d;
-            color: white;
-            position: fixed; 
-            left: 0; 
-            right: 0; 
-            bottom: 0; 
-            text-align: center; 
-            padding: 0.75rem; 
-            z-index: 1000; 
+	    footer {
+	            background-color: #2d2d2d;
+	            color: white;
+	            position: fixed; 
+	            left: 0; 
+	            right: 0; 
+	            bottom: 0; 
+	            text-align: center; 
+	            padding: 0.75rem; 
+	            z-index: 1000; 
+	    }
+	    
+	    body{
+	        background-image: url('/img/imageimage.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-y: auto;
+	    }
+	    
+	    /* Dark semi-transparent overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
         }
-</style>
+        
+	</style>
 </head>
 <body class="bg-gray-100 text-gray-900">
    
@@ -25,11 +49,12 @@
 <nav class="bg-gray-800 text-white shadow-lg py-3">
     <div class="flex justify-between items-center px-4 mx-auto">
         <a href="/dashboard" class="text-lg font-bold flex items-center">
-            <img src="/img/home-icon.svg" alt="Dashboard" class="h-6 w-6 mr-2"> Dashboard
+            <img src="/img/home-icon.svg" alt="Dashboard" class="h-6 w-6 mr-2"> Home
         </a>
         <div class="flex items-center space-x-4">
             <span class="font-semibold" th:text="${fullname}"></span>
             <a href="/settings" class="text-white font-bold hover:underline">My Profile</a>
+            <a href="/myplans" class="text-white font-bold hover:underline">My Plans</a>
             <a href="/createplan" class="text-white font-bold hover:underline">Create Plan</a>
             <a href="/logout" class="text-red-500 font-bold hover:underline">Logout</a>
         </div>
