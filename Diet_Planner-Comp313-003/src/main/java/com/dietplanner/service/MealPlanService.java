@@ -17,29 +17,40 @@ public class MealPlanService {
     @Transactional
     public Map<String, Object> getUserMealPlans(Long accountId) {
         List<MealPlan> mealPlans = mealPlanRepository.getUserMealPlans(accountId);
-        Map<String, MealPlan> dailyTotals = groupByAssignedDay(mealPlans);
-        return Map.of("mealPlans", mealPlans, "dailyTotals", dailyTotals);
-    }
-    
-    private Map<String, MealPlan> groupByAssignedDay(List<MealPlan> mealPlans) {
         Map<String, MealPlan> dailyTotals = new HashMap<>();
+        Map<String, Integer> mealPlanIds = new HashMap<>();
+
         for (MealPlan meal : mealPlans) {
             String assignedDay = meal.getAssignedDay();
+            
+            // Store mealPlanId for the first occurrence of the assigned day
+            mealPlanIds.putIfAbsent(assignedDay, meal.getMealPlanId());
+
+            // Grouping by assigned day
             dailyTotals.putIfAbsent(assignedDay, new MealPlan());
             MealPlan mealPlan = dailyTotals.get(assignedDay);
+
+            // ✅ Assign mealPlanId to the MealPlan object in dailyTotals
+            mealPlan.setMealPlanId(mealPlanIds.get(assignedDay));
+
+            // Aggregate nutritional values
             mealPlan.setTotalCalories(mealPlan.getTotalCalories() + meal.getCalories());
             mealPlan.setTotalCarbohydrate(mealPlan.getTotalCarbohydrate() + meal.getCarbohydrate());
             mealPlan.setTotalProtein(mealPlan.getTotalProtein() + meal.getProtein());
             mealPlan.setTotalFat(mealPlan.getTotalFat() + meal.getFat());
         }
 
-        return dailyTotals;
-    }
-
+        return Map.of(
+            "mealPlans", mealPlans,
+            "dailyTotals", dailyTotals, //Now includes mealPlanId
+            "mealPlanIds", mealPlanIds
+        );
+    }    
+       
     @Transactional
-    public void deleteDailyTotal(Long userId, String assignedDay) {
+    public void deleteDailyTotal(Long userId, Integer planMealId) {
         // Delete meal plans related to the assigned day for the user.
-        mealPlanRepository.deleteMealPlansByDay(userId, assignedDay);
+        mealPlanRepository.deleteMealPlansByDay(userId, planMealId);
     }    
 
 }
