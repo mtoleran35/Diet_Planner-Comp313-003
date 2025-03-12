@@ -118,6 +118,6 @@ public class PageController {
         }
 
         mealPlanService.deleteDailyTotal(user.getId(), planMealId);
-        return ResponseEntity.ok("Daily total meal deleted successfully");
+        return ResponseEntity.ok("Meal Plan Deleted Successfully!");
     }        
 }

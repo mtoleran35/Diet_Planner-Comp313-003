@@ -179,11 +179,11 @@
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert('Daily total meal deleted successfully!');
+                        alert('Meal Plan Deleted Successfully!');
                         // Optionally remove the corresponding day's meals from the display
                         location.reload(); // Reload the page to reflect changes
                     } else {
-                        alert('Failed to delete meals for the day.');
+                        alert('Failed to delete meal plan');
                     }
                 })
                 .catch(error => {
