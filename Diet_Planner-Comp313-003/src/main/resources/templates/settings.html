@@ -4,6 +4,135 @@
     <title>Settings</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+     /* Fade In Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Slide In for Titles */
+        .slide-in-title {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInTitle 1.5s ease-out forwards;
+        }
+
+        @keyframes slideInTitle {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Smooth Fade for Paragraphs */
+        .fade-in-paragraph {
+            opacity: 0;
+            animation: fadeInParagraph 2s ease-out forwards;
+        }
+
+        @keyframes fadeInParagraph {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Fade In and Fade Out for "Manage your meal..." text */
+        .fade-in-out {
+            opacity: 0;
+            animation: fadeInOut 4s ease-in-out forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Smooth List Animation */
+        .fade-in-list {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInList 2s ease-out forwards;
+        }
+
+        @keyframes fadeInList {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bounce Animation for Save Meal Plans */
+        .bounce-in {
+            animation: bounceIn 2s ease-in-out forwards;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+       /* Background Image */
+        body {
+            background-image: url('/img/imageimage.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        /* Dark semi-transparent overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        footer {
+            background-color: #2d2d2d;
+            color: white;
+            position: fixed; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            text-align: center; 
+            padding: 0.75rem; 
+            z-index: 1000; 
+         }
         /* Existing CSS remains unchanged */
     </style>
 </head>
@@ -104,7 +233,7 @@
             <div class="mb-6">
                 <label for="dietPreference" class="block text-sm font-medium text-gray-700">Diet Preference</label>
                 <select name="dietPreference" id="dietPreference" class="editable p-3 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" disabled>
-                    
+                    <option th:value="${user.dietPreference}" th:text="${user.dietPreference}" selected></option>
                     <option value="ANY">ANY</option>
                     <option value="HIGH PROTEIN">HIGH PROTEIN</option>
                     <option value="KETO">KETO</option>
