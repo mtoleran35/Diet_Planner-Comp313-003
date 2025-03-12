@@ -15,7 +15,8 @@ BEGIN
         m.protein,
         m.fat,
         mpd.mealquantity,
-        mpd.assignedday
+        mpd.assignedday,
+		mpd.mealplanid
     FROM meal_plan mp
     JOIN account a ON mp.accountid = a.accountid
     JOIN meal_plan_detail mpd ON mp.mealplanid = mpd.mealplanid
