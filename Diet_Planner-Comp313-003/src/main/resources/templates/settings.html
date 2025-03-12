@@ -133,7 +133,7 @@
             padding: 0.75rem; 
             z-index: 1000; 
          }
-        /* Existing CSS remains unchanged */
+
     </style>
 </head>
 <body class="text-gray-900">
@@ -182,7 +182,20 @@
 
     <!-- Navbar -->
     <nav class="bg-gray-800 text-white shadow-lg py-3">
-        <!-- Navbar content remains unchanged -->
+        <div class="flex justify-between items-center px-4 mx-auto">
+            <!-- Home on the left -->
+            <a href="/dashboard" class="text-lg font-bold flex items-center">
+                <img src="/img/home-icon.svg" alt="Home" class="h-6 w-6 mr-2"> Home
+            </a>
+
+            <div class="flex items-center space-x-4">
+            <span class="font-semibold text-white" th:text="${user.firstName + ' ' + user.lastName}"></span>
+            <a href="/settings" class="text-white font-bold hover:underline">My Profile</a>
+            <a href="/myplans" class="text-white font-bold hover:underline">My Plans</a>
+            <a href="/createplan" class="text-white font-bold hover:underline">Create Plan</a>
+            <a href="/logout" class="text-red-500 font-bold hover:underline">Logout</a>
+            </div>
+        </div>
     </nav>
 
     <!-- Page Content -->
