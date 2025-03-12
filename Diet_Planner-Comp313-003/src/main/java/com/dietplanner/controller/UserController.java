@@ -1,5 +1,4 @@
 package com.dietplanner.controller;
-
 import com.dietplanner.model.User;
 import com.dietplanner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,9 @@ public class UserController {
     public String registerUser(User user, Model model) {
         try {
             userService.saveUser(user);
-            return "redirect:/login";
+            model.addAttribute("success", true);
+            //return "redirect:/login";
+            return "register"; 
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "register";
@@ -38,6 +39,7 @@ public class UserController {
         userService.updateUserProfile(user.getUsername(), updatedUser);
         return "redirect:/dashboard";
     }
+
     @GetMapping("/change-password")
     public String showChangePasswordPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         try {
@@ -51,9 +53,8 @@ public class UserController {
             System.err.println("Error loading user: " + e.getMessage());
             model.addAttribute("user", null); // Handle the case where the user is null
         }
-
         model.addAttribute("successMessage", ""); // Prepare success message
-        model.addAttribute("errorMessage", "");   // Prepare error message
+        model.addAttribute("errorMessage", ""); // Prepare error message
         return "change-password";
     }
 
@@ -63,11 +64,15 @@ public class UserController {
                                  @RequestParam String newPassword,
                                  @RequestParam String confirmPassword,
                                  Model model) {
+    	// Validate the password
+        if (!userService.isValidPassword(newPassword)) {
+        	model.addAttribute("errorMessage", "Password must be at least 8 characters long, contain at least one number, and one uppercase letter.");
+            return "change-password";
+        }
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("errorMessage", "New Password and Confirm Password do not match");
             return "change-password";
         }
-
         try {
             userService.updatePassword(userDetails.getUsername(), currentPassword, newPassword);
             model.addAttribute("successMessage", "Password updated successfully!");

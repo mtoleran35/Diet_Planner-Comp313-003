@@ -1,4 +1,5 @@
 package com.dietplanner.service;
+import java.util.regex.Pattern;
 
 import com.dietplanner.model.User;
 import com.dietplanner.repository.UserRepository;
@@ -26,16 +27,32 @@ public class UserService implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
-                .password(user.getPassword())  // Hashed password from database
+                .password(user.getPassword()) // Hashed password from database
                 .roles(user.getAccounttype()) // Assign roles
                 .build();
     }
-    
+
     public User saveUser(User user) {
+        // Check if the username already exists
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("User already exists");
+            throw new IllegalArgumentException("User with this username already exists");
+        }
+        
+        // Validate the password
+        if (!isValidPassword(user.getPassword())) {
+        	throw new IllegalArgumentException("Password must be at least 8 characters long, contain at least one number, and one uppercase letter.");
         }
 
+        // Validation: Ensure no negative values for Weight and Caloric Intake Goal
+        if (user.getWeight() != null && user.getWeight() < 0) {
+            throw new IllegalArgumentException("Weight cannot be negative");
+        }
+
+        if (user.getCaloricIntakeGoal() != null && user.getCaloricIntakeGoal() < 0) {
+            throw new IllegalArgumentException("Daily Caloric Intake Goal cannot be negative");
+        }
+
+        // Encrypt the password if not already hashed
         if (!user.getPassword().startsWith("$argon2id$")) { // Ensure password is hashed
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -47,7 +64,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-    
+
     // Method to get the current logged-in user
     public User getUserDetails() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -57,6 +74,17 @@ public class UserService implements UserDetailsService {
     // Method to update user profile
     public void updateUserProfile(String username, User updatedUser) {
         User existingUser = findByUsername(username); // Fetch existing user by username
+
+        // Validation: Ensure no negative values for Weight and Caloric Intake Goal
+        if (updatedUser.getWeight() != null && updatedUser.getWeight() < 0) {
+            throw new IllegalArgumentException("Weight cannot be negative");
+        }
+
+        if (updatedUser.getCaloricIntakeGoal() != null && updatedUser.getCaloricIntakeGoal() < 0) {
+            throw new IllegalArgumentException("Daily Caloric Intake Goal cannot be negative");
+        }
+
+        // Update user details
         existingUser.setFirstName(updatedUser.getFirstName());
         existingUser.setLastName(updatedUser.getLastName());
         existingUser.setWeight(updatedUser.getWeight());
@@ -70,8 +98,8 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(existingUser); // Save updated user to the database
     }
-    
-    //Change password 
+
+    // Change password
     public void updatePassword(String username, String currentPassword, String newPassword) {
         User user = findByUsername(username); // Fetch the user by username
 
@@ -84,5 +112,11 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user); // Save the updated user
     }
+    
+    public boolean isValidPassword(String password) {
+        // Regular expression for the validation
+        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
 
- }
+        return Pattern.matches(passwordPattern, password);
+    }
+}
