@@ -1,82 +1,152 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<title>Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+input[type="checkbox"] {
+	transform: scale(1.5); 
+}
+
+body {
+	background-image: url('/img/dashboard-image.png');
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	min-height: 100vh;
+	position: relative;
+	overflow-y: auto;
+}
+
+body::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+.table-container {
+	background-color: rgba(255, 255, 255, 0.9); 
+	border-radius: 8px; 
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+	padding: 32px;
+	margin-top: 30px; 
+	max-width: 1400px; 
+	margin: 0 auto; 
+    margin-bottom: 30px;
+}
+
+table {
+	background-color: white;
+	width: 100%; 
+	border-collapse: collapse;
+}
+
+th, td {
+	background-color: white; 
+	border: 1px solid #ddd; 
+	padding: 12px;
+	text-align: left; 
+}
+
+th {
+	background-color: #f4f4f4; 
+	font-weight: bold;
+	color: #333; 
+}
+</style>
+
 </head>
 <body class="bg-gray-100 text-gray-900">
-    <!-- Navbar -->
-    <nav class="bg-gray-800 text-white shadow-lg py-3">
-      <div class="flex justify-between items-center px-4 mx-auto">
-        <a href="/meals/admin-dashboard" class="text-lg font-bold flex items-center">
-            <img src="/img/home-icon.svg" alt="Admin Dashboard" class="h-6 w-6 mr-2"> Admin Dashboard
-        </a>
-        
-        <!-- User info and logout on the right -->
-          <div class="flex items-center space-x-4">
-            <span class="font-semibold" th:text="${username}"></span>
-            <a href="/logout" class="text-red-500 font-bold hover:underline">Logout</a>
-          </div>
-        </div>
-    </nav>
-       
-    <!-- Admin Content -->
-    <section class="p-6">
-        <h1 class="text-3xl font-bold">Admin Dashboard</h1>
-        <p class="text-gray-600 mt-2">Manage users and meal plans.</p>
+	<!-- Navbar -->
+	<nav class="bg-gray-800 text-white shadow-lg py-3">
+		<div class="flex justify-between items-center px-4 mx-auto">
+			<a href="/meals/admin-dashboard"
+				class="text-lg font-bold flex items-center"> <img
+				src="/img/home-icon.svg" alt="Admin Dashboard" class="h-6 w-6 mr-2">
+				Admin Dashboard
+			</a>
 
-        <!-- Meal Management -->
-        <div class="mt-6">
-            <h2 class="text-2xl font-bold mb-4">Manage Meals</h2>
-            <a href="/meals/add" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add Meal</a>
+			<!-- User info and logout on the right -->
+			<div class="flex items-center space-x-4">
+				<span class="font-semibold" th:text="${username}"></span> <a
+					href="/logout" class="text-red-500 font-bold hover:underline">Logout</a>
+			</div>
+		</div>
+	</nav>
 
-		<table class="mt-4 w-full border-collapse border border-gray-300">
-		    <thead>
-		        <tr class="bg-gray-200">
-		            <th class="border p-2">Meal Name</th>
-		            <th class="border p-2">Calories</th>
-		            <th class="border p-2">Carbohydrate</th>
-		            <th class="border p-2">Fat</th>
-		            <th class="border p-2">Protein</th>
-		            <th class="border p-2">Actions</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-		        <tr th:if="${meals != null and not #lists.isEmpty(meals)}" th:each="meal : ${meals}">
-		            <td class="border p-2" th:text="${meal.mealName}"></td>
-		            <td class="border p-2" th:text="${meal.calories}"></td>
-		            <td class="border p-2" th:text="${meal.carbohydrate}"></td>
-		            <td class="border p-2" th:text="${meal.fat}"></td>
-		            <td class="border p-2" th:text="${meal.protein}"></td>
-		            <td class="border p-2">
-		                <a th:href="@{/meals/edit/{mealId}(mealId=${meal.mealId})}" class="text-yellow-500 hover:underline">Edit</a>
-		                <a href="#" th:attr="onclick=|confirmDelete(${meal.mealId})|" class="text-red-500 hover:underline ml-2">Delete</a>
-		            </td>
-		        </tr>
-		        <tr th:unless="${meals != null and not #lists.isEmpty(meals)}">
-		            <td colspan="6" class="border p-2 text-center text-gray-500">No meals found</td>
-		        </tr>
-		    </tbody>
-		</table>
+	<!-- Admin Content -->
+	<section class="p-6">
+    <h1 class="text-3xl font-bold" style="color: white; font-weight: bold;">Admin Dashboard</h1>
+    <p class="text-gray-600 mt-2" style="color: white; font-weight: bold;">Manage users and meal plans.</p>
+</section>
 
-        </div>
-    </section>
-     <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
-        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
-            <p>&copy; 2025 Diet Planner |</p>
-            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
-            <span class="text-gray-400">|</span>
-            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
-        </div>
-    </footer>
+
+		<!-- Meal Management -->
+		<div class="table-container">
+		
+			<h2 class="text-2xl font-bold mb-4">Manage Meals</h2>
+			<a href="/meals/add"
+				class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add
+				Meal</a>
+				
+
+			<table class="mt-4 w-full border-collapse border border-gray-300">
+				<thead>
+					<tr class="bg-gray-200">
+						<th class="border p-2">Meal Name</th>
+						<th class="border p-2">Calories</th>
+						<th class="border p-2">Carbohydrate</th>
+						<th class="border p-2">Fat</th>
+						<th class="border p-2">Protein</th>
+						<th class="border p-2">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${meals != null and not #lists.isEmpty(meals)}"
+						th:each="meal : ${meals}">
+						<td class="border p-2" th:text="${meal.mealName}"></td>
+						<td class="border p-2" th:text="${meal.calories}"></td>
+						<td class="border p-2" th:text="${meal.carbohydrate}"></td>
+						<td class="border p-2" th:text="${meal.fat}"></td>
+						<td class="border p-2" th:text="${meal.protein}"></td>
+						<td class="border p-2"><a
+							th:href="@{/meals/edit/{mealId}(mealId=${meal.mealId})}"
+							class="text-yellow-500 hover:underline">Edit</a> <a href="#"
+							th:attr="onclick=|confirmDelete(${meal.mealId})|"
+							class="text-red-500 hover:underline ml-2">Delete</a></td>
+					</tr>
+					<tr th:unless="${meals != null and not #lists.isEmpty(meals)}">
+						<td colspan="6" class="border p-2 text-center text-gray-500">No
+							meals found</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</section>
+	<!-- Footer -->
+	<footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
+		<div
+			class="container mx-auto flex justify-center items-center space-x-4 text-sm">
+			<p>&copy; 2025 Diet Planner |</p>
+			<a href="/privacy" class="text-gray-300 hover:text-white">Privacy
+				Policy</a> <span class="text-gray-400">|</span> <a href="/contact"
+				class="text-gray-300 hover:text-white">Contact</a>
+		</div>
+	</footer>
 	<script>
- 	function confirmDelete(mealId) {
- 	    if (confirm("Are you sure you want to delete this meal?")) {
- 	        window.location.href = "/meals/delete/" + mealId;
- 	    }
- 	}
+		function confirmDelete(mealId) {
+			if (confirm("Are you sure you want to delete this meal?")) {
+				window.location.href = "/meals/delete/" + mealId;
+			}
+		}
 	</script>
-	
+
 </body>
 </html>

@@ -108,9 +108,9 @@
             min-height: 100vh;
             position: relative;
             overflow-y: auto;
+            padding-bottom: 80px;
         }
-
-        /* Dark semi-transparent overlay */
+        
         body::before {
             content: "";
             position: fixed;
@@ -121,6 +121,9 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: -1;
         }
+        .content-section {
+        margin-bottom: 3rem; 
+       }
 
         footer {
             background-color: #2d2d2d;
