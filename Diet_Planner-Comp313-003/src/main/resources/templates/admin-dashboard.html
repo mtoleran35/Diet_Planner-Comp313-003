@@ -50,7 +50,7 @@
 		            <td class="border p-2" th:text="${meal.protein}"></td>
 		            <td class="border p-2">
 		                <a th:href="@{/meals/edit/{mealId}(mealId=${meal.mealId})}" class="text-yellow-500 hover:underline">Edit</a>
-		                <a href="#" th:attr="onclick=|confirmDelete(${meal.mealId})|" class="text-red-500 hover:underline ml-2">Delete</a>
+		                <a href="#" th:attr="onclick=|confirmDelete(${meal.mealId}, '${meal.mealName}')|" class="text-red-500 hover:underline ml-2">Delete</a>
 		            </td>
 		        </tr>
 		        <tr th:unless="${meals != null and not #lists.isEmpty(meals)}">
@@ -71,9 +71,11 @@
         </div>
     </footer>
 	<script>
- 	function confirmDelete(mealId) {
+ 	function confirmDelete(mealId, mealName) {
  	    if (confirm("Are you sure you want to delete this meal?")) {
- 	        window.location.href = "/meals/delete/" + mealId;
+ 	       window.location.href = "/meals/delete/" + mealId;
+ 	        
+ 	       alert("Meal '" + mealName + "' has been successfully deleted!");
  	    }
  	}
 	</script>

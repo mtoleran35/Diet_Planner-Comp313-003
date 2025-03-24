@@ -39,6 +39,9 @@ public class MealService {
     }
 
     public void deleteMeal(Long mealId) {
-        mealRepository.deleteById(mealId);
-    }
+        Meal meal = mealRepository.findById(mealId)
+                .orElseThrow(() -> new RuntimeException("Meal not found"));
+        meal.setStatus("Inactive"); // Update the status
+        mealRepository.save(meal); // Save the updated meal
+    }    
 }
