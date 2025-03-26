@@ -9,46 +9,67 @@
     <meta name="csrf-token" th:content="${_csrf.token}" />
 	<meta name="csrf-header" th:content="${_csrf.headerName}" />
 	<style>
-	    input[type="checkbox"] {
-	        transform: scale(1.5); /* Increase the size by 1.5 times */
-	    }
-	    
-	    body{
-	        background-image: url('/img/imageimage.png');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            min-height: 100vh;
-            position: relative;
-            overflow-y: auto;
-	    }
-	    
-	    /* Dark semi-transparent overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
-        }
-	    
-	    footer {
-	            background-color: #2d2d2d;
-	            color: white;
-	            position: fixed; 
-	            left: 0; 
-	            right: 0; 
-	            bottom: 0; 
-	            text-align: center; 
-	            padding: 0.75rem; 
-	            z-index: 1000; 
-	    
-	    }
-	</style>
+    input[type="checkbox"] {
+        transform: scale(1.5); /* Increase the size by 1.5 times */
+    }
+
+    body {
+        background-image: url('/img/imageimage.png');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        min-height: 100vh;
+        position: relative;
+        overflow-y: auto;
+        padding-bottom: 60px; 
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+    }
+
+    table {
+        width: 90%; 
+        margin: 0 auto; 
+    }
+
+    .relative {
+        max-width: 1200px;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    th, td {
+        padding: 16px;
+        font-size: 16px; 
+    }
+
+    .table-container {
+        margin-bottom: 50px; 
+         
+    }
+
+    footer {
+        background-color: #2d2d2d;
+        color: white;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        padding: 0.75rem;
+        z-index: 1000;
+    }
+</style>
+
 </head>
 <body class="bg-gray-100 text-gray-900">
     <!-- Navbar -->
