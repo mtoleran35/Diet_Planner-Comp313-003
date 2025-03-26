@@ -3,8 +3,64 @@
 <head>
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        input[type="checkbox"] {
+            transform: scale(1.5);
+        }
+
+        body {
+            background-image: url('/img/dashboard-image.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .table-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            margin: 30px auto;
+            max-width: 1400px;
+        }
+
+        table {
+            background-color: white;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
+    <!-- Navbar -->
     <nav class="bg-gray-800 text-white shadow-lg py-3">
         <div class="flex justify-between items-center px-4 mx-auto">
             <a href="/meals/admin-dashboard" class="text-lg font-bold flex items-center">
@@ -16,15 +72,13 @@
             </div>
         </div>
     </nav>
-    
-    <section class="p-6">
-        <h1 class="text-3xl font-bold">Admin Dashboard</h1>
-        <p class="text-gray-600 mt-2">Manage users and meal plans.</p>
 
-        <div class="mt-6">
+    <section class="p-6">
+        <!-- Meal Management -->
+        <div class="table-container">
             <h2 class="text-2xl font-bold mb-4">Manage Meals</h2>
             <a href="/meals/add" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add Meal</a>
-            
+
             <div class="mt-4 flex space-x-4">
                 <input type="text" id="searchMeal" placeholder="Search by Meal Name" 
                     class="px-4 py-2 border rounded w-1/2" onkeyup="filterMeals()">
@@ -34,7 +88,7 @@
                     <option value="Inactive">Inactive</option>
                 </select>
             </div>
-
+            
             <table class="mt-4 w-full border-collapse border border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
@@ -47,10 +101,9 @@
                         <th class="border p-2">Actions</th>
                     </tr>
                 </thead>
-                <tbody id="mealTableBody">
-                    <tr th:each="meal : ${meals}" class="meal-row" 
-                        th:data-name="${meal.mealName.toLowerCase()}" 
-                        th:data-status="${meal.status.toLowerCase()}">
+                <tbody>
+                    <tr th:if="${meals != null and not #lists.isEmpty(meals)}" th:each="meal : ${meals}"
+                        class="meal-row" th:attr="data-name=${meal.mealName.toLowerCase()}, data-status=${meal.status.toLowerCase()}">
                         <td class="border p-2" th:text="${meal.mealName}"></td>
                         <td class="border p-2" th:text="${meal.calories}"></td>
                         <td class="border p-2" th:text="${meal.carbohydrate}"></td>
@@ -58,33 +111,19 @@
                         <td class="border p-2" th:text="${meal.protein}"></td>
                         <td class="border p-2" th:text="${meal.status}"></td>
                         <td class="border p-2">
-                            <a th:href="@{/meals/edit/{mealId}(mealId=${meal.mealId})}" 
-                                class="text-yellow-500 hover:underline">Edit</a>
-                            <a href="#" th:attr="onclick=|confirmDelete(${meal.mealId})|" 
-                                class="text-red-500 hover:underline ml-2">Delete</a>
+                            <a th:href="@{/meals/edit/{mealId}(mealId=${meal.mealId})}" class="text-yellow-500 hover:underline">Edit</a>
+                            <a href="#" th:attr="onclick=|confirmDelete(${meal.mealId}, '${meal.mealName}')|" class="text-red-500 hover:underline ml-2">Delete</a>
                         </td>
+                    </tr>
+                    <tr th:unless="${meals != null and not #lists.isEmpty(meals)}">
+                        <td colspan="7" class="border p-2 text-center text-gray-500">No meals found</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
-    <footer class="bg-gray-800 text-white text-center py-3 shadow-lg">
-        <div class="container mx-auto flex justify-center items-center space-x-4 text-sm">
-            <p>&copy; 2025 Diet Planner |</p>
-            <a href="/privacy" class="text-gray-300 hover:text-white">Privacy Policy</a>
-            <span class="text-gray-400">|</span>
-            <a href="/contact" class="text-gray-300 hover:text-white">Contact</a>
-        </div>
-    </footer>
-
     <script>
-        function confirmDelete(mealId) {
-            if (confirm("Are you sure you want to delete this meal?")) {
-                window.location.href = "/meals/delete/" + mealId;
-            }
-        }
-
         function filterMeals() {
             let searchText = document.getElementById("searchMeal").value.toLowerCase();
             let statusFilter = document.getElementById("searchStatus").value.toLowerCase();
