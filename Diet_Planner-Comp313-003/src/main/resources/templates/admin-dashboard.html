@@ -172,25 +172,12 @@ th {
         }
         
         
-
         function changeStatus(mealId) {
-            if (confirm("Are you sure you want to change the status to Active?")) {
-                fetch(`/api/meals/change-status/${mealId}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert("Meal status updated successfully!");
-                        window.location.reload();
-                    } else {
-                        alert("Failed to update meal status.");
-                    }
-                })
-                .catch(error => console.error("Error:", error));
+            if (confirm("Are you sure you want to Activate the meal ?")) {
+            	window.location.href = "/meals/statusUpdate/" + mealId;
+            	alert("Meal '" + mealName + "' has been successfully activated!");
             }
+        
         }
 
     </script>

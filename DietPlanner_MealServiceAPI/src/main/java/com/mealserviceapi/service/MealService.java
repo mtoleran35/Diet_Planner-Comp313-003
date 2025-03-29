@@ -43,5 +43,21 @@ public class MealService {
                 .orElseThrow(() -> new RuntimeException("Meal not found"));
         meal.setStatus("Inactive"); // Update the status
         mealRepository.save(meal); // Save the updated meal
-    }    
+    }
+
+ // Method to change the status of a meal
+    public Meal changeStatus(Long mealId) {
+        Meal meal = mealRepository.findById(mealId)
+                .orElseThrow(() -> new RuntimeException("Meal not found"));
+
+        // If status is Inactive, change it to Active
+        if ("Inactive".equalsIgnoreCase(meal.getStatus())) {
+            meal.setStatus("Active");
+            return mealRepository.save(meal);
+        }
+
+        // If the meal is already Active, no need to change, just return the same meal
+        return meal;
+    }
+
 }
