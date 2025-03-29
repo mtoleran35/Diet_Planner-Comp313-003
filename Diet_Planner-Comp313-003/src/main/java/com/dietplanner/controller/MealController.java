@@ -73,4 +73,10 @@ public class MealController {
         mealApiService.deleteMeal(mealId);
         return "redirect:/meals/admin-dashboard";
     }
+    
+    @GetMapping("/statusUpdate/{mealId}")
+    public String statusMealUpdate(@PathVariable Long mealId) {
+    	mealApiService.changeStatus(mealId);
+        return "redirect:/meals/admin-dashboard";
+    }
 }

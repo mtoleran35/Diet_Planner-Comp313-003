@@ -56,4 +56,11 @@ public class MealApiService {
         String url = mealServiceUrl + "/" + mealId;
         restTemplate.delete(url);
     }
-}
+
+	public void changeStatus(Long mealId) {
+	       String url = mealServiceUrl + "/change-status/" + mealId;
+	       restTemplate.put(url, null);
+	    }
+		
+	}
+
