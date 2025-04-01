@@ -3,21 +3,40 @@
 <head>
     <title>Edit Meal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* Push the footer to the bottom */
-            min-height: 100vh; /* Ensure the body is at least the height of the viewport */
-            background-color: #f7fafc; /* Tailwind's bg-gray-100 */
-        }
-        .main-content {
-            flex: 1; 
-        }
+    <style> 
+		body {
+			background-image: url('/img/dashboard-image.png');
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			min-height: 100vh;
+			position: relative;
+			overflow-y: auto;
+		}
+		
+		body::before {
+			content: "";
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: -1;
+		}
+		
+		footer {
+			background-color: #2d2d2d;
+			color: white;
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			text-align: center;
+			padding: 0.75rem;
+			z-index: 1000;
+		}
     </style>
 </head>
 <body class="bg-gray-100">
