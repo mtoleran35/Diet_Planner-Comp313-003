@@ -1,0 +1,102 @@
+trigger:
+- main  # Trigger pipeline on push to 'main' branch
+
+pool:
+  vmImage: 'windows-latest'  # Use the latest Windows image with pre-installed Maven
+
+stages:
+- stage: Checkout
+  displayName: 'Checkout Code'
+  jobs:
+  - job: CheckoutJob
+    steps:
+    - task: Checkout@1
+      displayName: 'Checkout the code from GitHub'
+
+- stage: InstallMaven
+  displayName: 'Install Maven'
+  jobs:
+  - job: InstallMavenJob
+    steps:
+    - script: |
+        echo "Installing custom Maven from C:\Program Files\apache-maven-3.9.9"
+        setx MAVEN_HOME "C:\Program Files\apache-maven-3.9.9"
+        setx PATH "%PATH%;C:\Program Files\apache-maven-3.9.9\bin"
+        echo "Maven installed and path set."
+      displayName: 'Set up Maven environment variables'
+
+- stage: Build
+  displayName: 'Build Stage'
+  dependsOn: Checkout
+  jobs:
+  - job: BuildJob
+    steps:
+    - task: Maven@3
+      displayName: 'Build with Maven'
+      inputs:
+        mavenPomFile: 'pom.xml'  # Path to Maven POM file
+        mavenOptions: '-Xmx3072m'  # Increase memory limit if necessary
+        javaHomeOption: 'JDKVersion'  # Use JDK version specified below
+        jdkVersionOption: '1.11'  # JDK version to use (ensure your project supports Java 11)
+        jdkArchitectureOption: 'x64'  # JDK architecture (64-bit)
+        publishJUnitResults: true  # Publish test results after build
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'  # Location of test reports
+        goals: 'clean install'  # Clean and install dependencies (compile, test, and package)
+
+- stage: CodeAnalysis
+  displayName: 'Code Analysis Stage'
+  dependsOn: Build
+  jobs:
+  - job: CodeAnalysisJob
+    steps:
+    - task: SonarQubePrepare@5
+      displayName: 'Prepare SonarQube Analysis'
+      inputs:
+        SonarQube: 'SonarQubeServiceConnection'  # SonarQube service connection (replace with your actual connection name)
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliOptions: '-Dsonar.projectKey=DietPlanner_DietPlanner'  # Replace with your actual SonarQube project key
+    - task: Maven@3
+      displayName: 'Run SonarQube Analysis'
+      inputs:
+        mavenPomFile: 'pom.xml'  # Path to Maven POM file
+        goals: 'verify sonar:sonar'  # Run SonarQube analysis after build
+    - task: SonarQubePublish@5
+      displayName: 'Publish SonarQube Results'
+      inputs:
+        SonarQube: 'SonarQubeServiceConnection'  # SonarQube service connection name (replace with actual)
+
+- stage: Test
+  displayName: 'Test Stage'
+  dependsOn: CodeAnalysis
+  jobs:
+  - job: TestJob
+    steps:
+    - task: Maven@3
+      displayName: 'Run Tests'
+      inputs:
+        mavenPomFile: 'pom.xml'  # Path to Maven POM file
+        goals: 'test'  # Run unit tests
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results'
+      inputs:
+        testResultsFiles: '**/target/test-*.xml'  # Adjust path if your test reports are located elsewhere
+        testRunTitle: 'Unit Tests Results'  # Optional title for the test run
+
+- stage: ArtifactGeneration
+  displayName: 'Artifact Generation Stage'
+  dependsOn: Test
+  jobs:
+  - job: ArtifactJob
+    steps:
+    - task: Maven@3
+      displayName: 'Create Deployable Artifact'
+      inputs:
+        mavenPomFile: 'pom.xml'  # Path to Maven POM file
+        goals: 'package'  # Create deployable artifact (e.g., .jar or .war)
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build Artifacts'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'  # Path where build artifacts are staged
+        artifactName: 'drop'  # Name of the artifact
+        publishLocation: 'Container'  # Location to store the artifact
