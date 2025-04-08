@@ -22,6 +22,9 @@ public class MealService {
     }
 
     public Meal saveMeal(Meal meal) {
+        if (meal.getStatus() == null || meal.getStatus().trim().isEmpty()) {
+            meal.setStatus("Active");
+        }
         return mealRepository.save(meal);
     }
 
