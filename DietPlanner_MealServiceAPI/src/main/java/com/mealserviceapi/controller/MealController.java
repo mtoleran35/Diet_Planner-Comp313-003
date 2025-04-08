@@ -2,6 +2,9 @@ package com.mealserviceapi.controller;
 
 import com.mealserviceapi.model.Meal;
 import com.mealserviceapi.service.MealService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +31,10 @@ public class MealController {
     }
 
     @PostMapping
-    public Meal addMeal(@RequestBody Meal meal) {
+    public Meal addMeal(@Valid @RequestBody Meal meal) {
+        if (meal.getStatus() == null || meal.getStatus().isBlank()) {
+            meal.setStatus("Active");
+        }
         return mealService.saveMeal(meal);
     }
 

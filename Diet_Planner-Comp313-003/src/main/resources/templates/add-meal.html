@@ -65,17 +65,23 @@ footer {
 				th:value="${_csrf.token}" /> <label
 				class="block mb-2 font-semibold">Meal Name</label> <input
 				type="text" name="mealName" class="w-full p-2 border rounded mb-4"
-				required> <label class="block mb-2 font-semibold">Calories</label>
-			<input type="number" name="calories"
-				class="w-full p-2 border rounded mb-4" required> <label
-				class="block mb-2 font-semibold">Carbohydrates (g)</label> <input
-				type="number" name="carbohydrate"
-				class="w-full p-2 border rounded mb-4" required> <label
-				class="block mb-2 font-semibold">Fat (g)</label> <input
-				type="number" name="fat" class="w-full p-2 border rounded mb-4"
-				required> <label class="block mb-2 font-semibold">Protein
-				(g)</label> <input type="number" name="protein"
-				class="w-full p-2 border rounded mb-4" required>
+				required> 
+				
+				<label class="block mb-2 font-semibold">Calories</label>
+				<input type="number" name="calories" class="w-full p-2 border rounded mb-4" required 
+				       min="0" max="2147483647" step="1" pattern="\d+" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+				
+				<label class="block mb-2 font-semibold">Carbohydrates (g)</label>
+				<input type="number" name="carbohydrate" class="w-full p-2 border rounded mb-4" required 
+				       min="0" max="2147483647" step="1" pattern="\d+" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+				
+				<label class="block mb-2 font-semibold">Fat (g)</label>
+				<input type="number" name="fat" class="w-full p-2 border rounded mb-4" required 
+				       min="0" max="2147483647" step="1" pattern="\d+" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+				
+				<label class="block mb-2 font-semibold">Protein (g)</label>
+				<input type="number" name="protein" class="w-full p-2 border rounded mb-4" required 
+				       min="0" max="2147483647" step="1" pattern="\d+" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
 
 			<button type="submit"
 				class="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600">Add
