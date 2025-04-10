@@ -118,7 +118,7 @@
                 </div>
                 <div>
                   <a th:href="@{/meals/edit/{mealId}(mealId=${meal.mealId})}" class="text-yellow-500 hover:underline">Edit</a>
-                  <a href="#" th:attr="onclick=|confirmDelete(${meal.mealId}, '${meal.mealName}')|" class="text-red-500 hover:underline ml-2">Delete</a>
+                  <a href="#" th:attr="onclick=|confirmDelete(${meal.mealId}, '${meal.mealName}')|" class="text-red-500 hover:underline ml-2">Deactivate</a>
                 </div>
               </td>
             </tr>
@@ -158,9 +158,9 @@
     }
 
     function confirmDelete(mealId, mealName) {
-      if (confirm("Are you sure you want to delete this meal?")) {
+      if (confirm("Are you sure you want to deactivate this meal?")) {
         window.location.href = "/meals/delete/" + mealId;
-        alert("Meal '" + mealName + "' has been successfully deleted!");
+        alert("Meal '" + mealName + "' has been successfully deactivated!");
       }
     }
 
