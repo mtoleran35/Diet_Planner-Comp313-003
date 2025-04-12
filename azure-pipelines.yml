@@ -1,0 +1,264 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+# deployment all mock
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: project-selfhosted-agent
+
+variables:
+  JAVA_HOME: 'C:\Program Files\Java\jdk-17.0.14.7'
+  MAVEN_HOME: 'C:\Apache\Maven'
+  MAVEN_OPTS: '-Dmaven.repo.local=$(Pipeline.Workspace)/.m2/repository'
+  SONAR_SCANNER_HOME: 'C:\sonar-scanner-5.0.1.3006-windows'
+  SONAR_JAVA_PATH: 'C:\Program Files\Java\jdk-17.0.14.7\bin\java.exe'
+  SONARQUBE_URL: 'http://localhost:9000'
+
+stages:
+# -----------------------------------------
+# CI Stage
+# -----------------------------------------
+- stage: CI
+  displayName: 'Continuous Integration'
+  jobs:
+    - job: BuildAndTest
+      displayName: 'Build and Test'
+      steps:
+        # Checkout with clean: true (safe now due to artifact relocation)
+        - checkout: self
+          clean: true
+          displayName: 'Checkout Code'
+
+        # Setup Environment
+        - task: CmdLine@2
+          displayName: 'Setup and Verify Environment'
+          inputs:
+            script: |
+              echo JAVA_HOME=%JAVA_HOME%
+              echo MAVEN_HOME=%MAVEN_HOME%
+              echo ##vso[task.prependpath]%SONAR_SCANNER_HOME%\bin
+
+              if not exist "%JAVA_HOME%\bin\java.exe" (
+                echo Error: Java not found.
+                exit /b 1
+              )
+
+              if not exist "%MAVEN_HOME%\bin\mvn.cmd" (
+                echo Error: Maven not found.
+                exit /b 1
+              )
+
+              echo ##vso[task.setvariable variable=JAVA_HOME]%JAVA_HOME%
+              echo ##vso[task.setvariable variable=MAVEN_HOME]%MAVEN_HOME%
+              echo ##vso[task.prependpath]%JAVA_HOME%\bin
+              echo ##vso[task.prependpath]%MAVEN_HOME%\bin
+
+              java -version
+              mvn -version
+              sonar-scanner -v
+          env:
+            PATH: $(JAVA_HOME)\bin;$(MAVEN_HOME)\bin;$(PATH)
+
+        # Build UI Project
+        - task: CmdLine@2
+          displayName: 'Build UI Project'
+          inputs:
+            script: |
+              cd Diet_Planner-Comp313-003
+              mvn -B clean package
+              echo "✅ UI build complete. Contents of target:"
+              dir /s /b target
+
+        # Copy UI build to artifact staging dir
+        - task: CopyFiles@2
+          displayName: 'Stage UI Artifacts'
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)/Diet_Planner-Comp313-003/target'
+            Contents: '**'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)/ui'
+
+        # Build API Project
+        - task: CmdLine@2
+          displayName: 'Build API Project'
+          inputs:
+            script: |
+              cd DietPlanner_MealServiceAPI
+              mvn -B clean package
+              echo "✅ API build complete. Contents of target:"
+              dir /s /b target
+
+        # Copy API build to artifact staging dir
+        - task: CopyFiles@2
+          displayName: 'Stage API Artifacts'
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)/DietPlanner_MealServiceAPI/target'
+            Contents: '**'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)/api'
+
+        # Publish artifacts with consistent naming
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish UI Artifact'
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)/ui'
+            artifactName: 'dietplanner-ui'
+            artifactType: 'pipeline'
+
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish API Artifact'
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)/api'
+            artifactName: 'dietplanner-api'
+            artifactType: 'pipeline'
+
+        # Sonar Scanner
+        - task: CmdLine@2
+          displayName: 'Run SonarQube Scanner'
+          inputs:
+            script: |
+              set SONAR_SCANNER_OPTS=-Djava.executable="%SONAR_JAVA_PATH%"
+              "%SONAR_SCANNER_HOME%\bin\sonar-scanner.bat" ^
+                -Dsonar.host.url=%SONARQUBE_URL% ^
+                -Dsonar.login=%SONARQUBE_TOKEN% ^
+                -Dsonar.projectKey=dietplanner ^
+                -Dsonar.projectName="Diet Planner App" ^
+                -Dsonar.sources=. ^
+                -Dsonar.java.binaries=**/target/classes ^
+                -Dsonar.sourceEncoding=UTF-8 ^
+                -Dsonar.java.source=17 ^
+                -Dsonar.java.version=17 ^
+                -X
+          env:
+            JAVA_HOME: $(JAVA_HOME)
+            MAVEN_HOME: $(MAVEN_HOME)
+            PATH: $(SONAR_SCANNER_HOME)\bin;$(JAVA_HOME)\bin;$(MAVEN_HOME)\bin;$(PATH)
+            SONARQUBE_TOKEN: $(sonarqubeTokenPAT)
+
+        # Unit Test Results
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFiles: '**/target/surefire-reports/TEST-*.xml'
+            testRunTitle: 'Java Unit Tests'
+
+        # Code Coverage
+        - task: PublishCodeCoverageResults@1
+          inputs:
+            codeCoverageTool: 'JaCoCo'
+            summaryFileLocation: '**/target/site/jacoco/jacoco.xml'
+            reportDirectory: '**/target/site/jacoco'
+
+# -----------------------------------------
+# Deliver Stage - Archive Artifacts
+# -----------------------------------------
+- stage: Deliver
+  displayName: 'Deliver Artifacts'
+  dependsOn: CI
+  jobs:
+    - job: Archive
+      displayName: 'Archive and Publish Artifacts'
+      steps:
+        # Download artifacts from current pipeline run
+        - task: DownloadPipelineArtifact@2
+          displayName: 'Download UI Artifact'
+          inputs:
+            artifactName: 'dietplanner-ui'
+            path: '$(Pipeline.Workspace)/ui-artifacts'
+
+        - task: DownloadPipelineArtifact@2
+          displayName: 'Download API Artifact'
+          inputs:
+            artifactName: 'dietplanner-api'
+            path: '$(Pipeline.Workspace)/api-artifacts'
+
+        # Publish as downloadable build artifacts
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish UI Artifact'
+          inputs:
+            PathtoPublish: '$(Pipeline.Workspace)/ui-artifacts'
+            ArtifactName: 'dietplanner-ui-$(Build.BuildId)'
+            publishLocation: 'Container'
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish API Artifact'
+          inputs:
+            PathtoPublish: '$(Pipeline.Workspace)/api-artifacts'
+            ArtifactName: 'dietplanner-api-$(Build.BuildId)'
+            publishLocation: 'Container'
+
+# -----------------------------------------
+# Deploy to Dev Environment (Mocked App Run)
+# -----------------------------------------
+- stage: DeployToDev
+  displayName: 'Deploy to Development Environment'
+  dependsOn: Deliver
+  jobs:
+    - job: DevDeploy
+      steps:
+        - task: CmdLine@2
+          displayName: 'Deploying to Dev Environment (localhost:8081)'
+          inputs:
+            script: |
+              echo Simulating deployment to Dev environment...
+              echo Launching API and UI services on http://localhost:8081 and http://localhost:8082
+              ping -n 4 127.0.0.1 > nul
+              echo ✅ Dev Environment simulated successfully.
+
+# -----------------------------------------
+# QAT Deployment (Mock)
+# -----------------------------------------
+- stage: DeployToQAT
+  displayName: 'Deploy to QAT Environment'
+  dependsOn: DeployToDev
+  condition: succeeded()
+  jobs:
+    - job: QATDeploy
+      steps:
+        - task: CmdLine@2
+          displayName: 'Mock QAT Deployment'
+          inputs:
+            script: |
+              echo Deploying to QAT environment...
+              ping -n 3 127.0.0.1 > nul
+              echo ✅ QAT Environment simulated successfully.
+
+# -----------------------------------------
+# Staging Deployment (Mock)
+# -----------------------------------------
+- stage: DeployToStaging
+  displayName: 'Deploy to Staging Environment'
+  dependsOn: DeployToQAT
+  condition: succeeded()
+  jobs:
+    - job: StagingDeploy
+      steps:
+        - task: CmdLine@2
+          displayName: 'Mock Staging Deployment'
+          inputs:
+            script: |
+              echo Deploying to Staging environment...
+              ping -n 3 127.0.0.1 > nul
+              echo ✅ Staging Environment simulated successfully.
+
+# -----------------------------------------
+# Production Deployment (Mock)
+# -----------------------------------------
+- stage: DeployToProd
+  displayName: 'Deploy to Production Environment'
+  dependsOn: DeployToStaging
+  condition: succeeded()
+  jobs:
+    - job: ProdDeploy
+      steps:
+        - task: CmdLine@2
+          displayName: 'Mock Production Deployment'
+          inputs:
+            script: |
+              echo Deploying to Production environment...
+              ping -n 3 127.0.0.1 > nul
+              echo ✅ Production Environment simulated successfully.
+
